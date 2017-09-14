@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{EA6B0D78-E115-4618-9327-88CC2283B961}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>DbD_PingTest</RootNamespace>
-    <AssemblyName>DbD_PingTest</AssemblyName>
+    <RootNamespace>DbD_Pingz</RootNamespace>
+    <AssemblyName>DbD_Pingz</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -83,7 +83,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IPHlpAPI32.cs" />
     <Compile Include="NetworkChooser.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,8 +95,15 @@
     <Compile Include="PingList.Designer.cs">
       <DependentUpon>PingList.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="DbDPingz.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="WhoisInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -129,6 +135,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PingList.resx">
       <DependentUpon>PingList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WhoisInfo.resx">
       <DependentUpon>WhoisInfo.cs</DependentUpon>

@@ -15,7 +15,7 @@ namespace DbD_Pingz
             this.parent = parent;
         }
 
-        public void setLists(IList<LivePacketDevice> devices, IList<IPAddress> ipAdresses)
+        public void setLists(IList<LivePacketDevice> devices)
         {
             if (devices.Count == 0)
             {
@@ -26,12 +26,8 @@ namespace DbD_Pingz
             {
                 Console.WriteLine("device " + i + "; Name:" + devices[i].Name + " Desc:" + devices[i].Description + "\n");
                 networkAdapters.Items.Add(devices[i].Description);
-                
-                
-            }
-            foreach(IPAddress adress in ipAdresses)
-            {
-                this.IPs.Items.Add(adress.ToString());
+
+
             }
         }
 
@@ -44,17 +40,9 @@ namespace DbD_Pingz
             //}
         }
 
-        private void IPs_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            parent.selectedLocalIp = IPs.SelectedIndex;
-            //if(parent.selectedLocalIp >= 0 && parent.selectedNetworkAdapter >= 0)
-            //{
-            //    this.Close();
-            //}
-        }
-
         private void buttonDone_Click(object sender, EventArgs e)
         {
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
     }
