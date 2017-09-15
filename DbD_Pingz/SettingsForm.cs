@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Forms;
-using System.Xml.Serialization;
-using System.Xml;
-using System.IO;
-using System.Runtime.Serialization;
 
 namespace DbD_Pingz
 {

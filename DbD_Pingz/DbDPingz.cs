@@ -7,6 +7,12 @@ using System.Windows.Forms;
 
 namespace DbD_Pingz
 {
+    public enum DbDPingzMode
+    {
+        Killer,
+        Surivivor
+    }
+
     class DbDPingz
     {
         static PingList ui;

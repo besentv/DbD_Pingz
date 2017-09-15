@@ -21,12 +21,15 @@ namespace DbD_Pingz
         public string goodPingColorHtml { get; set; }
         [XmlElement("badPingColorHtml")]
         public string badPingColorHtml { get; set; }
+        [XmlElement("programMode")]
+        public DbDPingzMode programMode { get; set; } 
 
         public Settings()
         {
             maxGoodPing = 90;
             killerMaxListEntries = 4;
             survivorMaxListEntries = 1;
+            programMode = DbDPingzMode.Killer;
             setBadPingColor(Color.Red);
             setGoodPingColor(Color.LightGreen);
         }
@@ -41,6 +44,37 @@ namespace DbD_Pingz
         {
             badPingColorHtml = ColorTranslator.ToHtml(color);
             badPingColor = color;
+        }
+
+        public static void writeSettingsToXML(string uri, Settings settings)
+        {
+            Console.WriteLine("Writing settings to file.");
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Settings));
+            using (TextWriter writer = new StreamWriter(uri))
+            {
+                xmlSerializer.Serialize(writer, settings);
+            }
+        }
+        public static Settings loadSettingsFromXML(string uri)
+        {
+            if (File.Exists(uri))
+            {
+                Console.WriteLine("Loading settings from file.");
+                XmlSerializer serializer = new XmlSerializer(typeof(Settings));
+                using (TextReader reader = new StreamReader(uri))
+                {
+                    try
+                    {
+                        return (Settings)serializer.Deserialize(reader);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.StackTrace);
+                        return null;
+                    }
+                }
+            }
+            return null;
         }
     }
 }
