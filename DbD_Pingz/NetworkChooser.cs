@@ -8,8 +8,8 @@ namespace DbD_Pingz
 {
     public partial class NetworkChooser : Form
     {
-        PingList parent;
-        public NetworkChooser(PingList parent)
+        PingInfo parent;
+        public NetworkChooser(PingInfo parent)
         {
             InitializeComponent();
             this.parent = parent;

@@ -15,14 +15,14 @@ namespace DbD_Pingz
 
     class DbDPingz
     {
-        static PingList ui;
+        static PingInfo ui;
 
         [STAThread]
         static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            ui = new PingList();
+            ui = new PingInfo();
             Application.Run(ui);
         }
     }

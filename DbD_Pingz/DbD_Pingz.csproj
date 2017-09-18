@@ -75,6 +75,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -89,11 +90,11 @@
     <Compile Include="NetworkChooser.Designer.cs">
       <DependentUpon>NetworkChooser.cs</DependentUpon>
     </Compile>
-    <Compile Include="PingList.cs">
+    <Compile Include="PingInfo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PingList.Designer.cs">
-      <DependentUpon>PingList.cs</DependentUpon>
+    <Compile Include="PingInfo.Designer.cs">
+      <DependentUpon>PingInfo.cs</DependentUpon>
     </Compile>
     <Compile Include="DbDPingz.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PingReciever.cs" />
     <Compile Include="WhoisInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,8 +135,8 @@
     <EmbeddedResource Include="NetworkChooser.resx">
       <DependentUpon>NetworkChooser.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PingList.resx">
-      <DependentUpon>PingList.cs</DependentUpon>
+    <EmbeddedResource Include="PingInfo.resx">
+      <DependentUpon>PingInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
