@@ -8,17 +8,21 @@ using PcapDotNet.Packets.IpV4;
 
 namespace DbD_Pingz
 {
-    public delegate void CalculatedPingEventHandler(object sender, CalculatedPingEventArgs args);
+    public delegate void CalculatedPingEventHandler(object sender, Ping ping);
 
-    public class CalculatedPingEventArgs : EventArgs
+    public class Ping
     {
-        public IpV4Address remoteIpV4Address { get; private set; }
-        public TimeSpan ping { get; private set; }
+        public IpV4Address ip { get; }
+        public TimeSpan ping { get; }
+        public DateTime sentPacketTime { get; }
+        public DateTime recievedPacketTime { get; }
 
-        public CalculatedPingEventArgs(IpV4Address remoteIpV4Address, TimeSpan ping)
+        public Ping(IpV4Address ip, DateTime sentPacketTime, DateTime recievedPacketTime)
         {
-            this.ping = ping;
-            this.remoteIpV4Address = remoteIpV4Address;
+            this.ip = ip;
+            this.ping = recievedPacketTime - sentPacketTime;
+            this.sentPacketTime = sentPacketTime;
+            this.recievedPacketTime = recievedPacketTime;
         }
     }
 
@@ -72,10 +76,11 @@ namespace DbD_Pingz
                 return;
             }
             this.deviceToSniff = deviceToSniff;
-            if (!tryParseOwnIpV4Address(deviceToSniff.Addresses, out thisMachinesIpV4Address)) {
+            if (!tryParseOwnIpV4Address(deviceToSniff.Addresses, out thisMachinesIpV4Address))
+            {
                 return;
             }
-            using(PacketCommunicator communicator = deviceToSniff.Open(65536, PacketDeviceOpenAttributes.Promiscuous, 1000))
+            using (PacketCommunicator communicator = deviceToSniff.Open(65536, PacketDeviceOpenAttributes.Promiscuous, 1000))
             {
                 Console.WriteLine("Sniffing device \"" + deviceToSniff.Description + "\" for DbD connections.");
                 communicator.SetFilter("ip and udp");
@@ -85,7 +90,7 @@ namespace DbD_Pingz
 
         private void recieve(Packet packet)
         {
-            if(packet == null)
+            if (packet == null)
             {
                 Console.WriteLine("NULL");
                 return;
@@ -99,9 +104,9 @@ namespace DbD_Pingz
                 {
                     DateTime requestTime;
                     waitingForResponse.TryGetValue(ip.Source, out requestTime);
-                    TimeSpan timeElapsed = packet.Timestamp - requestTime;
+                    // TimeSpan timeElapsed = packet.Timestamp - requestTime;
                     waitingForResponse.Remove(ip.Source);
-                    CalculatedPingEvent(this, new CalculatedPingEventArgs(ip.Source, timeElapsed));
+                    CalculatedPingEvent(this, new Ping(ip.Source, requestTime, packet.Timestamp));
                 }
             }
             else
