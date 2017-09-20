@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            this.list = new System.Windows.Forms.DataGridView();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            this.pingInfoList = new System.Windows.Forms.DataGridView();
             this.ipColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PingColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ipRightKlickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -44,35 +44,36 @@
             this.modeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.killerModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.survivorModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pingHistoryChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.pingInfoChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dataTicker = new System.Windows.Forms.Timer(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.list)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pingInfoList)).BeginInit();
             this.ipRightKlickMenu.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pingHistoryChart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pingInfoChart)).BeginInit();
             this.SuspendLayout();
             // 
-            // list
+            // pingInfoList
             // 
-            this.list.AllowUserToAddRows = false;
-            this.list.AllowUserToDeleteRows = false;
-            this.list.AllowUserToResizeColumns = false;
-            this.list.AllowUserToResizeRows = false;
-            this.list.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.pingInfoList.AllowUserToAddRows = false;
+            this.pingInfoList.AllowUserToDeleteRows = false;
+            this.pingInfoList.AllowUserToResizeRows = false;
+            this.pingInfoList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.list.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.list.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.list.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.pingInfoList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.pingInfoList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.pingInfoList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ipColumn,
             this.PingColumn});
-            this.list.Location = new System.Drawing.Point(12, 27);
-            this.list.Name = "list";
-            this.list.ReadOnly = true;
-            this.list.RowHeadersVisible = false;
-            this.list.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.list.Size = new System.Drawing.Size(503, 122);
-            this.list.TabIndex = 0;
-            this.list.MouseClick += new System.Windows.Forms.MouseEventHandler(this.list_MouseClick);
+            this.pingInfoList.Location = new System.Drawing.Point(12, 27);
+            this.pingInfoList.Name = "pingInfoList";
+            this.pingInfoList.ReadOnly = true;
+            this.pingInfoList.RowHeadersVisible = false;
+            this.pingInfoList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.pingInfoList.Size = new System.Drawing.Size(503, 122);
+            this.pingInfoList.TabIndex = 0;
+            this.pingInfoList.TabStop = false;
+            this.pingInfoList.SelectionChanged += new System.EventHandler(this.pingInfoList_SelectionChanged);
+            this.pingInfoList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.list_MouseClick);
             // 
             // ipColumn
             // 
@@ -172,56 +173,56 @@
             this.survivorModeToolStripMenuItem.Text = "Survivor Mode";
             this.survivorModeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.survivorModeToolStripMenuItem_CheckedChanged);
             // 
-            // pingHistoryChart
+            // pingInfoChart
             // 
-            this.pingHistoryChart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.pingInfoChart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea2.AxisX.Interval = 1D;
-            chartArea2.AxisX.IntervalOffset = 1D;
-            chartArea2.AxisX.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea2.AxisX.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea2.AxisX.IsMarginVisible = false;
-            chartArea2.AxisX.ScaleView.MinSize = 20D;
-            chartArea2.AxisX.ScaleView.Position = 0D;
-            chartArea2.AxisX.ScaleView.Size = 20D;
-            chartArea2.AxisX.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea2.AxisX.ScrollBar.Enabled = false;
-            chartArea2.AxisY.Interval = 25D;
-            chartArea2.AxisY.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea2.AxisY.IsMarginVisible = false;
-            chartArea2.AxisY.Minimum = 0D;
-            chartArea2.AxisY.ScaleView.Size = 200D;
-            chartArea2.AxisY.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea2.AxisY.ScrollBar.Enabled = false;
-            chartArea2.AxisY.Title = "Ping";
-            chartArea2.Name = "pingChartArea";
-            this.pingHistoryChart.ChartAreas.Add(chartArea2);
-            legend2.IsTextAutoFit = false;
-            legend2.MaximumAutoSize = 30F;
-            legend2.Name = "Legend1";
-            this.pingHistoryChart.Legends.Add(legend2);
-            this.pingHistoryChart.Location = new System.Drawing.Point(13, 155);
-            this.pingHistoryChart.Margin = new System.Windows.Forms.Padding(0);
-            this.pingHistoryChart.Name = "pingHistoryChart";
-            this.pingHistoryChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Pastel;
-            this.pingHistoryChart.Size = new System.Drawing.Size(502, 290);
-            this.pingHistoryChart.TabIndex = 3;
-            this.pingHistoryChart.Text = "chart1";
+            chartArea4.AxisX.Interval = 1D;
+            chartArea4.AxisX.IntervalOffset = 1D;
+            chartArea4.AxisX.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea4.AxisX.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea4.AxisX.IsMarginVisible = false;
+            chartArea4.AxisX.ScaleView.MinSize = 20D;
+            chartArea4.AxisX.ScaleView.Position = 0D;
+            chartArea4.AxisX.ScaleView.Size = 20D;
+            chartArea4.AxisX.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea4.AxisX.ScrollBar.Enabled = false;
+            chartArea4.AxisY.Interval = 25D;
+            chartArea4.AxisY.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea4.AxisY.IsMarginVisible = false;
+            chartArea4.AxisY.Minimum = 0D;
+            chartArea4.AxisY.ScaleView.Size = 200D;
+            chartArea4.AxisY.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea4.AxisY.ScrollBar.Enabled = false;
+            chartArea4.AxisY.Title = "Ping";
+            chartArea4.Name = "pingChartArea";
+            this.pingInfoChart.ChartAreas.Add(chartArea4);
+            legend4.IsTextAutoFit = false;
+            legend4.MaximumAutoSize = 30F;
+            legend4.Name = "Legend1";
+            this.pingInfoChart.Legends.Add(legend4);
+            this.pingInfoChart.Location = new System.Drawing.Point(13, 155);
+            this.pingInfoChart.Margin = new System.Windows.Forms.Padding(0);
+            this.pingInfoChart.Name = "pingInfoChart";
+            this.pingInfoChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Pastel;
+            this.pingInfoChart.Size = new System.Drawing.Size(502, 290);
+            this.pingInfoChart.TabIndex = 3;
+            this.pingInfoChart.Text = "chart1";
             // 
             // dataTicker
             // 
             this.dataTicker.Interval = 1000;
-            this.dataTicker.Tick += new System.EventHandler(this.updateControls);
+            this.dataTicker.Tick += new System.EventHandler(this.callPingInfoSubscribers);
             // 
             // PingInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(527, 457);
-            this.Controls.Add(this.pingHistoryChart);
+            this.Controls.Add(this.pingInfoChart);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.list);
+            this.Controls.Add(this.pingInfoList);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
@@ -230,11 +231,11 @@
             this.Text = "DbD pingz";
             this.TransparencyKey = System.Drawing.SystemColors.HotTrack;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.onFormClosed);
-            ((System.ComponentModel.ISupportInitialize)(this.list)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pingInfoList)).EndInit();
             this.ipRightKlickMenu.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pingHistoryChart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pingInfoChart)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -242,7 +243,7 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView list;
+        private System.Windows.Forms.DataGridView pingInfoList;
         private System.Windows.Forms.ContextMenuStrip ipRightKlickMenu;
         private System.Windows.Forms.ToolStripMenuItem whoisIp;
         private System.Windows.Forms.ToolStripMenuItem resetTableToolStripMenuItem;
@@ -253,7 +254,7 @@
         private System.Windows.Forms.ToolStripMenuItem killerModeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem survivorModeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.DataVisualization.Charting.Chart pingHistoryChart;
+        private System.Windows.Forms.DataVisualization.Charting.Chart pingInfoChart;
         private System.Windows.Forms.Timer dataTicker;
         private System.Windows.Forms.DataGridViewTextBoxColumn ipColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn PingColumn;

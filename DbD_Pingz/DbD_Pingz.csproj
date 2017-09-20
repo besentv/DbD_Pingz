@@ -97,6 +97,7 @@
       <DependentUpon>PingInfo.cs</DependentUpon>
     </Compile>
     <Compile Include="DbDPingz.cs" />
+    <Compile Include="PingList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsForm.cs">
