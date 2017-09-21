@@ -147,7 +147,6 @@ namespace DbD_Pingz
             Settings.writeSettingsToXML(saveXMLFileName, settings);
         }
 
-
         #region Ping info related
         public void getPings(object sender, Ping ping)
         {
