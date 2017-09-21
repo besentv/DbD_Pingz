@@ -9,10 +9,6 @@ namespace DbD_Pingz
     {
         [XmlElement("maxGoodPing")]
         public int maxGoodPing { get; set; }
-        [XmlElement("killerMaxListEntries")]
-        public int killerMaxListEntries { get; set; }
-        [XmlElement("survivorMaxListEntries")]
-        public int survivorMaxListEntries { get; set; }
         [XmlIgnore]
         public Color goodPingColor { get { return ColorTranslator.FromHtml(goodPingColorHtml); } private set { }  }
         [XmlIgnore]
@@ -21,17 +17,15 @@ namespace DbD_Pingz
         public string goodPingColorHtml { get; set; }
         [XmlElement("badPingColorHtml")]
         public string badPingColorHtml { get; set; }
-        [XmlElement("programMode")]
-        public DbDPingzMode programMode { get; set; } 
+        [XmlElement("SecondsUntilIPTimeout")]
+        public int SecondsUntilIPTimeout { get; set; }
 
         public Settings()
         {
             maxGoodPing = 90;
-            killerMaxListEntries = 4;
-            survivorMaxListEntries = 1;
-            programMode = DbDPingzMode.Killer;
             setBadPingColor(Color.Red);
             setGoodPingColor(Color.LightGreen);
+            SecondsUntilIPTimeout = 5;
         }
 
         public void setGoodPingColor(Color color)
