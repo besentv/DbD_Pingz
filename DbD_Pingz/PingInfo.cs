@@ -1,12 +1,12 @@
-﻿using PcapDotNet.Packets.IpV4;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Drawing;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using PcapDotNet.Core;
-using System.Drawing;
+using PcapDotNet.Packets.IpV4;
 
 namespace DbD_Pingz
 {
@@ -15,14 +15,11 @@ namespace DbD_Pingz
         public int selectedNetworkAdapter = -1;
         private NetworkChooser adapterChooser;
         private BackgroundWorker networkingBackgroundWorker;
-        private delegate void removePingSafeDelegate(IpV4Address ip);
 
         private DataGridView.HitTestInfo lastHitItem;
         private Settings settings;
         private const string saveXMLFileName = "DbD_PingTestSave.xml";
         private PingReciever pingReciever = new PingReciever();
-
-
 
         private delegate void accessPingInfoControlsSafely(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime);
         private ConcurrentDictionary<IpV4Address, Ping> pingList = new ConcurrentDictionary<IpV4Address, Ping>();
@@ -48,7 +45,7 @@ namespace DbD_Pingz
             networkingBackgroundWorker.RunWorkerAsync();
             dataTicker.Enabled = true;
             pingInfoChart.ChartAreas[0].AxisX.ScaleView.Scroll(chartCounter);
-            pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.addPingToChart));
+            pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.pingInfoChartSetPings));
             pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.pingInfoListSetPings));
 
         }
@@ -91,9 +88,7 @@ namespace DbD_Pingz
         private void ipRightKlickMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             if (e.ClickedItem.Text == "Whois this IP")
-            {
-                //Console.WriteLine(whoisIpMethod("http://ipinfo.io/" + list[lastHitItem.ColumnIndex, lastHitItem.RowIndex].Value.ToString() + "/json"));
-                // new WhoisInfo(whoisIpMethod("http://ipinfo.io/" + list[lastHitItem.ColumnIndex, lastHitItem.RowIndex].Value.ToString() + "/json")).ShowDialog();
+            { 
                 BackgroundWorker whoisLookupWorker = new BackgroundWorker();
                 whoisLookupWorker.DoWork += new DoWorkEventHandler(whoisAndShowForm);
                 whoisLookupWorker.RunWorkerAsync(pingInfoList[lastHitItem.ColumnIndex, lastHitItem.RowIndex].Value.ToString());
@@ -101,7 +96,6 @@ namespace DbD_Pingz
             if (e.ClickedItem.Text == "Reset table")
             {
                 pingInfoList.Rows.Clear();
-                resetPingHistoryChart();
             }
         }
         private void whoisAndShowForm(object sender, DoWorkEventArgs e)
@@ -133,34 +127,6 @@ namespace DbD_Pingz
             }
         }
 
-        private void killerModeToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
-        {
-            ToolStripMenuItem item = (ToolStripMenuItem)sender;
-            if (item.Checked == true)
-            {
-                item.Enabled = false;
-                item.Checked = true;
-                survivorModeToolStripMenuItem.Enabled = true;
-                survivorModeToolStripMenuItem.Checked = false;
-                settings.programMode = DbDPingzMode.Killer;
-                Console.WriteLine("Program mode set to Killer.");
-            }
-        }
-
-        private void survivorModeToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
-        {
-            ToolStripMenuItem item = (ToolStripMenuItem)sender;
-            if (item.Checked == true)
-            {
-                item.Enabled = false;
-                item.Checked = true;
-                this.killerModeToolStripMenuItem.Enabled = true;
-                this.killerModeToolStripMenuItem.Checked = false;
-                settings.programMode = DbDPingzMode.Surivivor;
-                Console.WriteLine("Program mode set to Survivor.");
-            }
-        }
-
         private void makeDbDPingzTopmostToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem item = (ToolStripMenuItem)sender;
@@ -181,96 +147,8 @@ namespace DbD_Pingz
             Settings.writeSettingsToXML(saveXMLFileName, settings);
         }
 
-        private void addPingToChart(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime)
-        {
-            if (pingInfoChart.InvokeRequired)
-            {
-                accessPingInfoControlsSafely caller = new accessPingInfoControlsSafely(addPingToChart);
-                this.Invoke(caller, new object[] { pingList, accessTime });
-            }
-            else
-            {
-                if ((settings.programMode == DbDPingzMode.Killer) && (pingInfoChart.Series.Count > settings.killerMaxListEntries))
-                {
-                    resetPingHistoryChart();
-                }
-                else if ((settings.programMode == DbDPingzMode.Surivivor) && (pingInfoChart.Series.Count > settings.survivorMaxListEntries))
-                {
-                    resetPingHistoryChart();
-                }
-                if (pingList.Count > 0)
-                {
 
-                    foreach (IpV4Address address in pingList.Keys)
-                    {
-                        if (pingInfoChart.Series.IsUniqueName(address.ToString()))
-                        {
-                            pingInfoChart.Series.Add(address.ToString());
-                            pingInfoChart.Series[address.ToString()].ChartType = SeriesChartType.Line;
-                            pingInfoChart.Series[address.ToString()].XValueType = ChartValueType.Int32;
-                            pingInfoChart.Series[address.ToString()].YValueType = ChartValueType.Int32;
-                            pingInfoChart.Series[address.ToString()].BorderWidth = 2;
-
-                        }
-                        if (pingList[address].ping.Milliseconds > 0)
-                        {
-                            pingInfoChart.Series[address.ToString()].Points.AddXY(chartCounter, pingList[address].ping.Milliseconds);
-
-                        }
-                    }
-
-                    if (pingInfoChart.ChartAreas[0].AxisX.Maximum > pingInfoChart.ChartAreas[0].AxisX.ScaleView.Size)
-                    {
-                        pingInfoChart.ChartAreas[0].AxisX.ScaleView.Scroll(pingInfoChart.ChartAreas[0].AxisX.Maximum);
-                    }
-                    chartCounter++;
-                }
-            }
-        }
-
-        private void resetPingHistoryChart()
-        {
-
-            if (pingInfoChart.InvokeRequired)
-            {
-                Action caller = new Action(resetPingHistoryChart);
-                this.Invoke(caller, new object[] { });
-            }
-            else
-            {
-                pingInfoChart.ChartAreas[0].AxisX.ScaleView.Scroll(pingInfoChart.ChartAreas[0].AxisX.Maximum);
-                foreach (Series s in pingInfoChart.Series)
-                {
-                    pingInfoChart.Series[s.Name].Points.Clear();
-                }
-                chartCounter = 0;
-                pingInfoChart.Series.Clear();
-            }
-        }
-
-        private bool getPingHistoryChartColor(IpV4Address ip, out Color color)
-        {
-            pingInfoChart.ApplyPaletteColors();
-            if (!pingInfoChart.Series.IsUniqueName(ip.ToString()))
-            {
-                color = pingInfoChart.Series[ip.ToString()].Color;
-                return true;
-            }
-            color = new Color();
-            return false;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
+        #region Ping info related
         public void getPings(object sender, Ping ping)
         {
             this.fillPingList(ping);
@@ -345,6 +223,11 @@ namespace DbD_Pingz
                                 }
                                 else
                                 {
+                                    Color chartColor;
+                                    if (getPingInfoChartSeriesColor(ip, out chartColor))
+                                    {
+                                        row.Cells[0].Style.BackColor = chartColor;
+                                    }
                                     row.Cells[1].Value = pingList[ip].ping.Milliseconds + "ms";
                                     if (pingList[ip].ping.Milliseconds > settings.maxGoodPing)
                                         row.Cells[1].Style.BackColor = settings.badPingColor;
@@ -358,7 +241,7 @@ namespace DbD_Pingz
                             int rowNumber;
                             Color chartColor;
                             rowNumber = pingInfoList.Rows.Add(new object[] { ip.ToString(), pingList[ip].ping.Milliseconds + "ms" });
-                            if (getPingHistoryChartColor(ip, out chartColor))
+                            if (getPingInfoChartSeriesColor(ip, out chartColor))
                             {
                                 pingInfoList.Rows[rowNumber].Cells[0].Style.BackColor = chartColor;
                             }
@@ -385,22 +268,29 @@ namespace DbD_Pingz
         private void pingInfoList_SelectionChanged(object sender, EventArgs e)
         {
             pingInfoList.ClearSelection();
-            
+
         }
 
         private void pingInfoChartSetPings(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime)
         {
             if (pingInfoChart.InvokeRequired)
             {
-                accessPingInfoControlsSafely caller = new accessPingInfoControlsSafely(addPingToChart);
-                this.Invoke(caller, new object[] { pingList ,accessTime });
+                accessPingInfoControlsSafely caller = new accessPingInfoControlsSafely(pingInfoChartSetPings);
+                this.Invoke(caller, new object[] { pingList, accessTime });
             }
             else
             {
+                if (chartCounter >= 10000)
+                {
+                    foreach (Series series in pingInfoChart.Series) series.Points.Clear();
+                    pingInfoChart.Series.Clear();
+                    pingInfoChart.ChartAreas[0].AxisX.ScaleView.Scroll(20);
+                    chartCounter = 0;
+                }
                 if (!pingList.IsEmpty)
                 {
                     List<Series> seriesToDelete = new List<Series>();
-                    foreach(IpV4Address ip in pingList.Keys)
+                    foreach (IpV4Address ip in pingList.Keys)
                     {
                         bool timedOut = false;
                         TimeSpan timeSincePacketRecieve = accessTime - pingList[ip].recievedPacketTime;
@@ -411,15 +301,27 @@ namespace DbD_Pingz
                         bool containsKey = false;
                         foreach (Series series in pingInfoChart.Series)
                         {
-                            if (timedOut)
-                            {
-                                seriesToDelete.Add(series);
-                            }
+                            List<DataPoint> pointsOutOfView = new List<DataPoint>();
                             if (series.Name.Contains(ip.ToString()))
                             {
-                                series.Points.AddXY(0, pingList[ip].ping.Milliseconds);
+                                if (timedOut)
+                                {
+                                    if (!seriesToDelete.Contains(series))
+                                    {
+                                        seriesToDelete.Add(series);
+                                    }
+                                }
+                                series.Points.AddXY(chartCounter, pingList[ip].ping.Milliseconds);
                                 containsKey = true;
                             }
+                            foreach (DataPoint point in series.Points)
+                            {
+                                if (point.XValue <= (pingInfoChart.ChartAreas[0].AxisX.ScaleView.ViewMinimum - 1))
+                                {
+                                    pointsOutOfView.Add(point);
+                                }
+                            }
+                            foreach (DataPoint point in pointsOutOfView) series.Points.Remove(point);
                         }
                         if (!containsKey)
                         {
@@ -428,17 +330,36 @@ namespace DbD_Pingz
                             series.ChartType = SeriesChartType.Line;
                             series.XValueType = ChartValueType.Int32;
                             series.YValueType = ChartValueType.Int32;
+                            series.BorderWidth = 2;
+                            series.Points.AddXY(chartCounter, pingList[ip].ping.Milliseconds);
                         }
-                      //  pingInfoChart.Series[address.ToString()].Points.AddXY(chartCounter, pingList[address].ping.Milliseconds);
                     }
-                    foreach(Series series in seriesToDelete)
+                    foreach (Series series in seriesToDelete)
                     {
-                        Console.WriteLine("Removing series:" + series.Name+ " from pingInfoChart.");
+                        Console.WriteLine("Removing series:" + series.Name + " from pingInfoChart.");
                         series.Points.Clear();
                         pingInfoChart.Series.Remove(series);
                     }
+                    if (pingInfoChart.ChartAreas[0].AxisX.Maximum > pingInfoChart.ChartAreas[0].AxisX.ScaleView.ViewMaximum)
+                    {
+                        pingInfoChart.ChartAreas[0].AxisX.ScaleView.Scroll(pingInfoChart.ChartAreas[0].AxisX.Maximum);
+                    }
+                    chartCounter++;
                 }
             }
         }
+        private bool getPingInfoChartSeriesColor(IpV4Address ip, out Color color)
+        {
+            pingInfoChart.ApplyPaletteColors();
+            if (!pingInfoChart.Series.IsUniqueName(ip.ToString()))
+            {
+                color = pingInfoChart.Series[ip.ToString()].Color;
+                return true;
+            }
+            color = new Color();
+            return false;
+        }
     }
+    #endregion
 }
+

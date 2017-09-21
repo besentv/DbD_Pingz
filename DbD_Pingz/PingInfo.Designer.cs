@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.pingInfoList = new System.Windows.Forms.DataGridView();
             this.ipColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PingColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -41,9 +41,6 @@
             this.programToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.makeDbDPingzTopmostToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.modeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.killerModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.survivorModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pingInfoChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dataTicker = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pingInfoList)).BeginInit();
@@ -113,8 +110,7 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.programToolStripMenuItem,
-            this.modeToolStripMenuItem});
+            this.programToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(527, 24);
@@ -145,63 +141,36 @@
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
-            // modeToolStripMenuItem
-            // 
-            this.modeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.killerModeToolStripMenuItem,
-            this.survivorModeToolStripMenuItem});
-            this.modeToolStripMenuItem.Name = "modeToolStripMenuItem";
-            this.modeToolStripMenuItem.Size = new System.Drawing.Size(51, 20);
-            this.modeToolStripMenuItem.Text = "Mode";
-            // 
-            // killerModeToolStripMenuItem
-            // 
-            this.killerModeToolStripMenuItem.Checked = true;
-            this.killerModeToolStripMenuItem.CheckOnClick = true;
-            this.killerModeToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.killerModeToolStripMenuItem.Enabled = false;
-            this.killerModeToolStripMenuItem.Name = "killerModeToolStripMenuItem";
-            this.killerModeToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
-            this.killerModeToolStripMenuItem.Text = "Killer Mode";
-            this.killerModeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.killerModeToolStripMenuItem_CheckedChanged);
-            // 
-            // survivorModeToolStripMenuItem
-            // 
-            this.survivorModeToolStripMenuItem.CheckOnClick = true;
-            this.survivorModeToolStripMenuItem.Name = "survivorModeToolStripMenuItem";
-            this.survivorModeToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
-            this.survivorModeToolStripMenuItem.Text = "Survivor Mode";
-            this.survivorModeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.survivorModeToolStripMenuItem_CheckedChanged);
-            // 
             // pingInfoChart
             // 
             this.pingInfoChart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea4.AxisX.Interval = 1D;
-            chartArea4.AxisX.IntervalOffset = 1D;
-            chartArea4.AxisX.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea4.AxisX.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea4.AxisX.IsMarginVisible = false;
-            chartArea4.AxisX.ScaleView.MinSize = 20D;
-            chartArea4.AxisX.ScaleView.Position = 0D;
-            chartArea4.AxisX.ScaleView.Size = 20D;
-            chartArea4.AxisX.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea4.AxisX.ScrollBar.Enabled = false;
-            chartArea4.AxisY.Interval = 25D;
-            chartArea4.AxisY.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea4.AxisY.IsMarginVisible = false;
-            chartArea4.AxisY.Minimum = 0D;
-            chartArea4.AxisY.ScaleView.Size = 200D;
-            chartArea4.AxisY.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea4.AxisY.ScrollBar.Enabled = false;
-            chartArea4.AxisY.Title = "Ping";
-            chartArea4.Name = "pingChartArea";
-            this.pingInfoChart.ChartAreas.Add(chartArea4);
-            legend4.IsTextAutoFit = false;
-            legend4.MaximumAutoSize = 30F;
-            legend4.Name = "Legend1";
-            this.pingInfoChart.Legends.Add(legend4);
+            chartArea1.AxisX.Interval = 1D;
+            chartArea1.AxisX.IntervalOffset = 1D;
+            chartArea1.AxisX.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea1.AxisX.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea1.AxisX.IsMarginVisible = false;
+            chartArea1.AxisX.ScaleView.MinSize = 20D;
+            chartArea1.AxisX.ScaleView.Position = 0D;
+            chartArea1.AxisX.ScaleView.Size = 20D;
+            chartArea1.AxisX.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea1.AxisX.ScrollBar.Enabled = false;
+            chartArea1.AxisX.Title = "Time";
+            chartArea1.AxisY.Interval = 25D;
+            chartArea1.AxisY.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea1.AxisY.IsMarginVisible = false;
+            chartArea1.AxisY.Minimum = 0D;
+            chartArea1.AxisY.ScaleView.Size = 200D;
+            chartArea1.AxisY.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea1.AxisY.ScrollBar.Enabled = false;
+            chartArea1.AxisY.Title = "Ping";
+            chartArea1.Name = "pingChartArea";
+            this.pingInfoChart.ChartAreas.Add(chartArea1);
+            legend1.IsTextAutoFit = false;
+            legend1.MaximumAutoSize = 30F;
+            legend1.Name = "Legend1";
+            this.pingInfoChart.Legends.Add(legend1);
             this.pingInfoChart.Location = new System.Drawing.Point(13, 155);
             this.pingInfoChart.Margin = new System.Windows.Forms.Padding(0);
             this.pingInfoChart.Name = "pingInfoChart";
@@ -250,9 +219,6 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem programToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem makeDbDPingzTopmostToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem modeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem killerModeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem survivorModeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.DataVisualization.Charting.Chart pingInfoChart;
         private System.Windows.Forms.Timer dataTicker;
