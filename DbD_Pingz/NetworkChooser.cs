@@ -1,7 +1,6 @@
 ﻿using PcapDotNet.Core;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Windows.Forms;
 
 namespace DbD_Pingz
@@ -15,7 +14,7 @@ namespace DbD_Pingz
             this.parent = parent;
         }
 
-        public void setLists(IList<LivePacketDevice> devices)
+        public void SetLists(IList<LivePacketDevice> devices)
         {
             if (devices.Count == 0)
             {
@@ -26,21 +25,15 @@ namespace DbD_Pingz
             {
                 Console.WriteLine("device " + i + "; Name:" + devices[i].Name + " Desc:" + devices[i].Description + "\n");
                 networkAdapters.Items.Add(devices[i].Description);
-
-
             }
         }
 
-        private void networkAdapters_SelectedIndexChanged(object sender, EventArgs e)
+        private void NetworkAdapters_SelectedIndexChanged(object sender, EventArgs e)
         {
             parent.selectedNetworkAdapter = networkAdapters.SelectedIndex;
-            //if (parent.selectedLocalIp >= 0 && parent.selectedNetworkAdapter >= 0)
-            //{
-            //    this.Close();
-            //}
         }
 
-        private void buttonDone_Click(object sender, EventArgs e)
+        private void ButtonDone_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
             this.Close();

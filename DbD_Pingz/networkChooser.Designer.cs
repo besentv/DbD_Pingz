@@ -44,7 +44,7 @@
             this.networkAdapters.Name = "networkAdapters";
             this.networkAdapters.Size = new System.Drawing.Size(356, 21);
             this.networkAdapters.TabIndex = 1;
-            this.networkAdapters.SelectedIndexChanged += new System.EventHandler(this.networkAdapters_SelectedIndexChanged);
+            this.networkAdapters.SelectedIndexChanged += new System.EventHandler(this.NetworkAdapters_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -64,7 +64,7 @@
             this.buttonDone.TabIndex = 4;
             this.buttonDone.Text = "Done";
             this.buttonDone.UseVisualStyleBackColor = true;
-            this.buttonDone.Click += new System.EventHandler(this.buttonDone_Click);
+            this.buttonDone.Click += new System.EventHandler(this.ButtonDone_Click);
             // 
             // NetworkChooser
             // 
@@ -76,6 +76,7 @@
             this.Controls.Add(this.networkAdapters);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "NetworkChooser";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "DbD Pingz";
             this.TransparencyKey = System.Drawing.SystemColors.HotTrack;
             this.ResumeLayout(false);

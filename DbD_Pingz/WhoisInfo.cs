@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.ComponentModel;
+using System.IO;
 using System.Net;
 using System.Windows.Forms;
 
@@ -9,11 +10,20 @@ namespace DbD_Pingz
         public WhoisInfo(string ip)
         {
             InitializeComponent();
-            string whoisString = whoisIp("http://ipinfo.io/" + ip + "/json");
-            this.whoisText.Text = whoisString.Replace("\n", "\r\n");
+
+            BackgroundWorker whoisLookupWorker = new BackgroundWorker();
+            whoisLookupWorker.DoWork += new DoWorkEventHandler(FillRichTextBox);
+            whoisLookupWorker.RunWorkerAsync(ip);
         }
 
-        private string whoisIp(string requestUrl)
+        private void FillRichTextBox(object sender, DoWorkEventArgs e)
+        {
+            string ip = (string)e.Argument;
+            string whoisString = WhoisIp("http://ipinfo.io/" + ip + "/json");
+            this.whoisText.Text = whoisString.Replace("\n", "\r\n");
+        }
+ 
+        private string WhoisIp(string requestUrl)
         {
             WebRequest wr = WebRequest.Create(requestUrl);
             wr.Method = "GET";

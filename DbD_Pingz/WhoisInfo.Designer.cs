@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WhoisInfo));
             this.whoisText = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
@@ -50,8 +51,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(386, 324);
             this.Controls.Add(this.whoisText);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(90, 90);
             this.Name = "WhoisInfo";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "WhoisInfo";
             this.ResumeLayout(false);
 

@@ -12,17 +12,17 @@ namespace DbD_Pingz
 
     public class Ping
     {
-        public IpV4Address ip { get; }
-        public TimeSpan ping { get; }
-        public DateTime sentPacketTime { get; }
-        public DateTime recievedPacketTime { get; }
+        public IpV4Address Ip { get; }
+        public TimeSpan TimeElapsed { get; }
+        public DateTime SentPacketTime { get; }
+        public DateTime RecievedPacketTime { get; }
 
         public Ping(IpV4Address ip, DateTime sentPacketTime, DateTime recievedPacketTime)
         {
-            this.ip = ip;
-            this.ping = recievedPacketTime - sentPacketTime;
-            this.sentPacketTime = sentPacketTime;
-            this.recievedPacketTime = recievedPacketTime;
+            this.Ip = ip;
+            this.TimeElapsed = recievedPacketTime - sentPacketTime;
+            this.SentPacketTime = sentPacketTime;
+            this.RecievedPacketTime = recievedPacketTime;
         }
     }
 
@@ -40,9 +40,8 @@ namespace DbD_Pingz
             waitingForResponse = new Dictionary<IpV4Address, DateTime>();
         }
 
-        private bool tryParseOwnIpV4Address(ReadOnlyCollection<DeviceAddress> addresses, out IpV4Address parsedAddress)
+        private bool TryParseOwnIpV4Address(ReadOnlyCollection<DeviceAddress> addresses, out IpV4Address parsedAddress)
         {
-            IpV4Address tmp;
             string internet = "Internet ";
             string ownIpString;
             foreach (DeviceAddress address in deviceToSniff.Addresses)
@@ -55,9 +54,9 @@ namespace DbD_Pingz
                         ownIpString = address.Address.ToString();
                         ownIpString = ownIpString.Replace(internet, "");
                         Console.WriteLine("Trying to parse IP string: '" + ownIpString + "'");
-                        if (IpV4Address.TryParse(ownIpString, out tmp) == true)
+                        if (IpV4Address.TryParse(ownIpString, out IpV4Address temporaryIpObject) == true)
                         {
-                            parsedAddress = tmp;
+                            parsedAddress = temporaryIpObject;
                             return true;
                         }
                     }
@@ -68,7 +67,7 @@ namespace DbD_Pingz
             return false;
         }
 
-        public void startPingReciever(LivePacketDevice deviceToSniff)
+        public void StartPingReciever(LivePacketDevice deviceToSniff)
         {
             if (deviceToSniff == null)
             {
@@ -76,7 +75,7 @@ namespace DbD_Pingz
                 return;
             }
             this.deviceToSniff = deviceToSniff;
-            if (!tryParseOwnIpV4Address(deviceToSniff.Addresses, out thisMachinesIpV4Address))
+            if (!TryParseOwnIpV4Address(deviceToSniff.Addresses, out thisMachinesIpV4Address))
             {
                 return;
             }
@@ -84,11 +83,11 @@ namespace DbD_Pingz
             {
                 Console.WriteLine("Sniffing device \"" + deviceToSniff.Description + "\" for DbD connections.");
                 communicator.SetFilter("ip and udp");
-                communicator.ReceivePackets(0, recieve);
+                communicator.ReceivePackets(0, Recieve);
             }
         }
 
-        private void recieve(Packet packet)
+        private void Recieve(Packet packet)
         {
             if (packet == null)
             {
@@ -102,9 +101,7 @@ namespace DbD_Pingz
             {
                 if (udp.Payload.Length == 68 && ip.Destination == thisMachinesIpV4Address && udp.Payload[0] == 0x01)//STUN Reply from OTHER Ip! First payload byte for a STUN response is 1. 
                 {
-                    DateTime requestTime;
-                    waitingForResponse.TryGetValue(ip.Source, out requestTime);
-                    // TimeSpan timeElapsed = packet.Timestamp - requestTime;
+                    waitingForResponse.TryGetValue(ip.Source, out DateTime requestTime);
                     waitingForResponse.Remove(ip.Source);
                     CalculatedPingEvent(this, new Ping(ip.Source, requestTime, packet.Timestamp));
                 }

@@ -7,40 +7,49 @@ namespace DbD_Pingz
 {
     public class Settings
     {
-        [XmlElement("maxGoodPing")]
-        public int maxGoodPing { get; set; }
+        [XmlElement("MaximumGoodPing")]
+        public int MaximumGoodPing { get; set; }
         [XmlIgnore]
-        public Color goodPingColor { get { return ColorTranslator.FromHtml(goodPingColorHtml); } private set { }  }
+        public Color GoodPingColor { get { return ColorTranslator.FromHtml(GoodPingColorHtml); } private set { } }
         [XmlIgnore]
-        public Color badPingColor { get { return ColorTranslator.FromHtml(badPingColorHtml); } private set { } }
+        public Color BadPingColor { get { return ColorTranslator.FromHtml(BadPingColorHtml); } private set { } }
         [XmlElement("goodPingColorHtml")]
-        public string goodPingColorHtml { get; set; }
+        public string GoodPingColorHtml { get; set; }
         [XmlElement("badPingColorHtml")]
-        public string badPingColorHtml { get; set; }
+        public string BadPingColorHtml { get; set; }
         [XmlElement("SecondsUntilIPTimeout")]
         public int SecondsUntilIPTimeout { get; set; }
+        [XmlElement("MainWindowSplitterDistance")]
+        public int MainWindowSplitterDistance { get; set; }
+        [XmlElement("DbDPingzIsTopmost")]
+        public bool DbDPingzIsTopmost { get; set; }
+        [XmlElement("PingInfoChartSize")]
+        public int PingInfoChartSize { get; set; }
 
         public Settings()
         {
-            maxGoodPing = 90;
-            setBadPingColor(Color.Red);
-            setGoodPingColor(Color.LightGreen);
+            MaximumGoodPing = 90;
+            SetBadPingColor(Color.Red);
+            SetGoodPingColor(Color.LightGreen);
             SecondsUntilIPTimeout = 5;
+            MainWindowSplitterDistance = 120;
+            DbDPingzIsTopmost = false;
+            PingInfoChartSize = 250;
         }
 
-        public void setGoodPingColor(Color color)
+        public void SetGoodPingColor(Color color)
         {
-            goodPingColorHtml = ColorTranslator.ToHtml(color);
-            goodPingColor = color;
+            GoodPingColorHtml = ColorTranslator.ToHtml(color);
+            GoodPingColor = color;
         }
 
-        public void setBadPingColor(Color color)
+        public void SetBadPingColor(Color color)
         {
-            badPingColorHtml = ColorTranslator.ToHtml(color);
-            badPingColor = color;
+            BadPingColorHtml = ColorTranslator.ToHtml(color);
+            BadPingColor = color;
         }
 
-        public static void writeSettingsToXML(string uri, Settings settings)
+        public static void WriteSettingsToXML(string uri, Settings settings)
         {
             Console.WriteLine("Writing settings to file.");
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(Settings));
@@ -49,7 +58,7 @@ namespace DbD_Pingz
                 xmlSerializer.Serialize(writer, settings);
             }
         }
-        public static Settings loadSettingsFromXML(string uri)
+        public static Settings LoadSettingsFromXML(string uri)
         {
             if (File.Exists(uri))
             {

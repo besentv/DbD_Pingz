@@ -71,7 +71,7 @@
             0,
             0,
             0});
-            this.maxGoodPingNumericUpDown.ValueChanged += new System.EventHandler(this.maxGoodPingNumericUpDown_ValueChanged);
+            this.maxGoodPingNumericUpDown.ValueChanged += new System.EventHandler(this.MaximumGoodPingNumericUpDown_ValueChanged);
             // 
             // label3
             // 
@@ -89,7 +89,7 @@
             this.chooseGoodPingColorButton.Size = new System.Drawing.Size(120, 33);
             this.chooseGoodPingColorButton.TabIndex = 6;
             this.chooseGoodPingColorButton.UseVisualStyleBackColor = true;
-            this.chooseGoodPingColorButton.Click += new System.EventHandler(this.chooseGoodPingColorButton_Click);
+            this.chooseGoodPingColorButton.Click += new System.EventHandler(this.ChooseGoodPingColorButton_Click);
             // 
             // chooseBadPingColorButton
             // 
@@ -98,7 +98,7 @@
             this.chooseBadPingColorButton.Size = new System.Drawing.Size(120, 33);
             this.chooseBadPingColorButton.TabIndex = 7;
             this.chooseBadPingColorButton.UseVisualStyleBackColor = true;
-            this.chooseBadPingColorButton.Click += new System.EventHandler(this.chooseBadPingColorButton_Click);
+            this.chooseBadPingColorButton.Click += new System.EventHandler(this.ChooseBadPingColorButton_Click);
             // 
             // label4
             // 
@@ -139,7 +139,7 @@
             0,
             0,
             0});
-            this.secondsToTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.secondsToTimeoutNumericUpDown_ValueChanged);
+            this.secondsToTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.SecondsToTimeoutNumericUpDown_ValueChanged);
             // 
             // SettingsForm
             // 
@@ -155,6 +155,7 @@
             this.Controls.Add(this.label2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "SettingsForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
             ((System.ComponentModel.ISupportInitialize)(this.maxGoodPingNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.secondsToTimeoutNumericUpDown)).EndInit();
