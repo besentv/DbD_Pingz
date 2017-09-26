@@ -17,14 +17,11 @@ namespace DbD_Pingz
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
-        public int selectedNetworkAdapter = -1;
-        private NetworkChooser adapterChooser;
-        private BackgroundWorker networkingBackgroundWorker;
-
         private DataGridView.HitTestInfo lastHitItem;
-        private Settings settings;
+
         private const string saveXMLFileName = "DbD_PingTestSave.xml";
-        private PingReciever pingReciever = new PingReciever();
+        private Settings settings;
+        PingReciever pingReciever;
 
         private delegate void accessPingInfoControlsSafely(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime);
         private ConcurrentDictionary<IpV4Address, Ping> pingList = new ConcurrentDictionary<IpV4Address, Ping>();
@@ -50,54 +47,41 @@ namespace DbD_Pingz
                 Settings.WriteSettingsToXML(saveXMLFileName, settings);
             }
 
-
             this.splitContainer1.SplitterDistance = settings.MainWindowSplitterDistance;
-            this.FormBorderStyle = FormBorderStyle.Sizable;
-            networkingBackgroundWorker = new BackgroundWorker();
-            networkingBackgroundWorker.DoWork += Sniff;
-            networkingBackgroundWorker.WorkerSupportsCancellation = true;
-            networkingBackgroundWorker.RunWorkerCompleted += NetworkingBackgroundWorker_RunWorkerCompleted;
-            networkingBackgroundWorker.RunWorkerAsync();
-            
-            dataTicker.Enabled = true;
             this.TopMost = settings.DbDPingzIsTopmost;
             this.pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size = settings.PingInfoChartSize;
             this.pingInfoChart.ChartAreas[0].AxisY.Interval = (pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size / 10);
             pingInfoChart.ChartAreas[0].AxisX.ScaleView.Scroll(chartCounter);
             this.makeDbDPingzTopmostToolStripMenuItem.Checked = settings.DbDPingzIsTopmost;
+
+
+
             this.pingInfoChart.MouseWheel += new MouseEventHandler(pingInfoChart_MouseWheel);
+
             pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.PingInfoChartSetPings));
             pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.PingInfoListSetPings));
+
+            pingReciever = new PingReciever();
+            pingReciever.CalculatedPingEvent += new CalculatedPingEventHandler(this.GetPings);
+
+            ChangeNetworkAdapter();
         }
 
-        private void NetworkingBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        public void ChangeNetworkAdapter()
         {
-            Environment.Exit(0);
+            pingReciever.TryStopPingReciever();
+            NetworkChooser networkChooser = new NetworkChooser();
+            do
+            {
+                networkChooser.ShowDialog(this);
+            } while ((networkChooser.SelectedLivePacketDevice == null) || (networkingBackgroundWorker.IsBusy));
+            networkingBackgroundWorker.RunWorkerAsync(networkChooser.SelectedLivePacketDevice);
+
         }
 
         public void Sniff(object sender, DoWorkEventArgs e)
         {
-            pingReciever.CalculatedPingEvent += new CalculatedPingEventHandler(this.GetPings);
-            IList<LivePacketDevice> devices = LivePacketDevice.AllLocalMachine;
-
-            Console.WriteLine("Device amount:" + devices.Count);
-            if (devices.Count == 0)
-            {
-                Console.WriteLine("No interfaces found! Make sure WinPcap is installed.");
-                return;
-            }
-            adapterChooser = new NetworkChooser(this);
-            adapterChooser.SetLists(devices);
-            do
-            {
-                adapterChooser.ShowDialog(this);
-                Console.WriteLine("NetworkChooser dialog result:" + adapterChooser.DialogResult.ToString());
-
-            } while ((selectedNetworkAdapter < 0 || selectedNetworkAdapter > (devices.Count - 1)) && (adapterChooser.DialogResult != DialogResult.OK));
-            LivePacketDevice selectedDevice = devices[selectedNetworkAdapter];
-            Console.WriteLine("Selected device:" + selectedDevice.Name);
-            devices = null;
-            pingReciever.StartPingReciever(selectedDevice);
+            pingReciever.StartPingReciever((LivePacketDevice)e.Argument);
         }
 
         private void OnFormClosed(object sender, FormClosedEventArgs e)
@@ -246,55 +230,60 @@ namespace DbD_Pingz
             {
                 if (!pingList.IsEmpty)
                 {
-                    if (chartCounter >= 10000)
-                    {
-                        pingInfoChart.ChartAreas[0].AxisX.ScaleView.Position = 20;
-                        chartCounter = 0;
-                    }
+                    pingInfoChart.Series.SuspendUpdates();
                     List<Series> seriesToDelete = new List<Series>();
-                    foreach (IpV4Address ip in pingList.Keys)
+                    if (chartCounter >= Int32.MaxValue)
                     {
-                        bool timedOut = false;
-                        TimeSpan timeSincePacketRecieve = accessTime - pingList[ip].RecievedPacketTime;
-                        if (timeSincePacketRecieve.Seconds > settings.SecondsUntilIPTimeout)
+                        foreach (Series series in pingInfoChart.Series) if (!seriesToDelete.Contains(series)) seriesToDelete.Add(series);
+                        pingInfoChart.ChartAreas[0].AxisX.ScaleView.Position = 20;
+                        chartCounter = -1;
+                    }
+                    if (chartCounter >= 0)
+                    {
+                        foreach (IpV4Address ip in pingList.Keys)
                         {
-                            timedOut = true;
-                        }
-                        bool containsKey = false;
-                        foreach (Series series in pingInfoChart.Series)
-                        {
-                            List<DataPoint> pointsOutOfView = new List<DataPoint>();
-                            if (series.Name.Contains(ip.ToString()))
+                            bool timedOut = false;
+                            TimeSpan timeSincePacketRecieve = accessTime - pingList[ip].RecievedPacketTime;
+                            if (timeSincePacketRecieve.Seconds > settings.SecondsUntilIPTimeout)
                             {
-                                if (timedOut)
+                                timedOut = true;
+                            }
+                            bool containsKey = false;
+                            foreach (Series series in pingInfoChart.Series)
+                            {
+                                List<DataPoint> pointsOutOfView = new List<DataPoint>();
+                                if (series.Name.Contains(ip.ToString()))
                                 {
-                                    if (!seriesToDelete.Contains(series))
+                                    if (timedOut)
                                     {
-                                        seriesToDelete.Add(series);
+                                        if (!seriesToDelete.Contains(series))
+                                        {
+                                            seriesToDelete.Add(series);
+                                        }
+                                    }
+                                    series.Points.AddXY(chartCounter, pingList[ip].TimeElapsed.Milliseconds);
+                                    containsKey = true;
+                                }
+                                foreach (DataPoint point in series.Points)
+                                {
+                                    if (point.XValue <= (pingInfoChart.ChartAreas[0].AxisX.ScaleView.ViewMinimum - 1))
+                                    {
+                                        pointsOutOfView.Add(point);
                                     }
                                 }
-                                series.Points.AddXY(chartCounter, pingList[ip].TimeElapsed.Milliseconds);
-                                containsKey = true;
+                                foreach (DataPoint point in pointsOutOfView) series.Points.Remove(point);
                             }
-                            foreach (DataPoint point in series.Points)
+                            if (!containsKey)
                             {
-                                if (point.XValue <= (pingInfoChart.ChartAreas[0].AxisX.ScaleView.ViewMinimum - 1))
-                                {
-                                    pointsOutOfView.Add(point);
-                                }
+                                Series series;
+                                series = pingInfoChart.Series.Add(ip.ToString());
+                                series.ChartType = SeriesChartType.FastLine;
+                                series.XValueType = ChartValueType.Int32;
+                                series.YValueType = ChartValueType.Int32;
+                                series.IsVisibleInLegend = false;
+                                series.BorderWidth = 2;
+                                series.Points.AddXY(chartCounter, pingList[ip].TimeElapsed.Milliseconds);
                             }
-                            foreach (DataPoint point in pointsOutOfView) series.Points.Remove(point);
-                        }
-                        if (!containsKey)
-                        {
-                            Series series;
-                            series = pingInfoChart.Series.Add(ip.ToString());
-                            series.ChartType = SeriesChartType.FastLine;
-                            series.XValueType = ChartValueType.Int32;
-                            series.YValueType = ChartValueType.Int32;
-                            series.IsVisibleInLegend = false;
-                            series.BorderWidth = 2;
-                            series.Points.AddXY(chartCounter, pingList[ip].TimeElapsed.Milliseconds);
                         }
                     }
                     foreach (Series series in seriesToDelete)
@@ -307,6 +296,7 @@ namespace DbD_Pingz
                     {
                         pingInfoChart.ChartAreas[0].AxisX.ScaleView.Scroll(pingInfoChart.ChartAreas[0].AxisX.Maximum);
                     }
+                    pingInfoChart.Series.ResumeUpdates();
                     chartCounter++;
                 }
             }
@@ -415,6 +405,11 @@ namespace DbD_Pingz
             this.ActiveControl = null;
         }
         #endregion
+
+        private void changeNetworkAdapterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ChangeNetworkAdapter();
+        }
     }
 }
 

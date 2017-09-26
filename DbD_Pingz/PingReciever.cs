@@ -26,12 +26,15 @@ namespace DbD_Pingz
         }
     }
 
-    public class PingReciever
+    public class PingReciever : IDisposable
     {
         public event CalculatedPingEventHandler CalculatedPingEvent;
 
+        private bool disposed = false;
+
         private IpV4Address thisMachinesIpV4Address;
         private LivePacketDevice deviceToSniff;
+        private PacketCommunicator reciever;
         private Dictionary<IpV4Address, DateTime> waitingForResponse;
 
 
@@ -69,21 +72,33 @@ namespace DbD_Pingz
 
         public void StartPingReciever(LivePacketDevice deviceToSniff)
         {
-            if (deviceToSniff == null)
+            if (reciever == null)
             {
-                Console.WriteLine("NULL2");
-                return;
-            }
-            this.deviceToSniff = deviceToSniff;
-            if (!TryParseOwnIpV4Address(deviceToSniff.Addresses, out thisMachinesIpV4Address))
-            {
-                return;
-            }
-            using (PacketCommunicator communicator = deviceToSniff.Open(65536, PacketDeviceOpenAttributes.Promiscuous, 1000))
-            {
+                if (deviceToSniff == null)
+                {
+                    Console.WriteLine("NULL2");
+                    return;
+                }
+                this.deviceToSniff = deviceToSniff;
+                if (!TryParseOwnIpV4Address(deviceToSniff.Addresses, out thisMachinesIpV4Address))
+                {
+                    return;
+                }
+                reciever = deviceToSniff.Open(65536, PacketDeviceOpenAttributes.Promiscuous, 1000);
                 Console.WriteLine("Sniffing device \"" + deviceToSniff.Description + "\" for DbD connections.");
-                communicator.SetFilter("ip and udp");
-                communicator.ReceivePackets(0, Recieve);
+                reciever.SetFilter("ip and udp");
+                reciever.ReceivePackets(0, Recieve);
+            }
+        }
+
+        public void TryStopPingReciever()
+        {
+            if (reciever != null)
+            {
+                reciever.Break();
+                reciever.Dispose();
+                Console.WriteLine("Stopping Ping Reciever");
+                reciever = null;
             }
         }
 
@@ -116,6 +131,32 @@ namespace DbD_Pingz
                     }
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        public virtual void Dispose(bool disposing)
+        {
+            Console.WriteLine("Disposing PingReciever object");
+            if (disposed)
+                return;
+            if (disposing)
+            {
+                //Managed objects here
+            }
+            if (reciever != null)
+                reciever.Dispose();
+
+            disposed = true;
+        }
+
+        ~PingReciever()
+        {
+            Dispose(false);
         }
     }
 }

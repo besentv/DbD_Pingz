@@ -42,9 +42,11 @@
             this.programToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.makeDbDPingzTopmostToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeNetworkAdapterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pingInfoChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dataTicker = new System.Windows.Forms.Timer(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.networkingBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.pingInfoList)).BeginInit();
             this.ipRightKlickMenu.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -128,7 +130,8 @@
             // 
             this.programToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.makeDbDPingzTopmostToolStripMenuItem,
-            this.settingsToolStripMenuItem});
+            this.settingsToolStripMenuItem,
+            this.changeNetworkAdapterToolStripMenuItem});
             this.programToolStripMenuItem.Name = "programToolStripMenuItem";
             this.programToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
             this.programToolStripMenuItem.Text = "Program";
@@ -137,16 +140,23 @@
             // 
             this.makeDbDPingzTopmostToolStripMenuItem.CheckOnClick = true;
             this.makeDbDPingzTopmostToolStripMenuItem.Name = "makeDbDPingzTopmostToolStripMenuItem";
-            this.makeDbDPingzTopmostToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.makeDbDPingzTopmostToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
             this.makeDbDPingzTopmostToolStripMenuItem.Text = "DbD Pingz Is Topmost";
             this.makeDbDPingzTopmostToolStripMenuItem.Click += new System.EventHandler(this.makeDbDPingzTopmostToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            // 
+            // changeNetworkAdapterToolStripMenuItem
+            // 
+            this.changeNetworkAdapterToolStripMenuItem.Name = "changeNetworkAdapterToolStripMenuItem";
+            this.changeNetworkAdapterToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.changeNetworkAdapterToolStripMenuItem.Text = "Change Network Adapter";
+            this.changeNetworkAdapterToolStripMenuItem.Click += new System.EventHandler(this.changeNetworkAdapterToolStripMenuItem_Click);
             // 
             // pingInfoChart
             // 
@@ -177,6 +187,7 @@
             chartArea1.Name = "pingChartArea";
             this.pingInfoChart.ChartAreas.Add(chartArea1);
             this.pingInfoChart.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pingInfoChart.IsSoftShadows = false;
             legend1.IsTextAutoFit = false;
             legend1.MaximumAutoSize = 30F;
             legend1.Name = "Legend1";
@@ -193,6 +204,7 @@
             // 
             // dataTicker
             // 
+            this.dataTicker.Enabled = true;
             this.dataTicker.Interval = 1000;
             this.dataTicker.Tick += new System.EventHandler(this.CallPingInfoSubscribers);
             // 
@@ -216,6 +228,11 @@
             this.splitContainer1.TabIndex = 4;
             this.splitContainer1.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer1_SplitterMoved);
             // 
+            // networkingBackgroundWorker
+            // 
+            this.networkingBackgroundWorker.WorkerSupportsCancellation = true;
+            this.networkingBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.Sniff);
+            // 
             // PingInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -224,7 +241,6 @@
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip1);
             this.DoubleBuffered = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(150, 150);
@@ -261,5 +277,7 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ipColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn PingColumn;
+        private System.Windows.Forms.ToolStripMenuItem changeNetworkAdapterToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker networkingBackgroundWorker;
     }
 }

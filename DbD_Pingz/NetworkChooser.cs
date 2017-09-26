@@ -7,15 +7,17 @@ namespace DbD_Pingz
 {
     public partial class NetworkChooser : Form
     {
-        PingInfo parent;
-        public NetworkChooser(PingInfo parent)
+        public LivePacketDevice SelectedLivePacketDevice { get; private set; } = null;
+
+        public NetworkChooser()
         {
             InitializeComponent();
-            this.parent = parent;
+            SetList(LivePacketDevice.AllLocalMachine);
         }
 
-        public void SetLists(IList<LivePacketDevice> devices)
+        public void SetList(IList<LivePacketDevice> devices)
         {
+            Console.WriteLine("Device amount:" + devices.Count);
             if (devices.Count == 0)
             {
                 Console.WriteLine("No interfaces found! Make sure WinPcap is installed.");
@@ -30,7 +32,8 @@ namespace DbD_Pingz
 
         private void NetworkAdapters_SelectedIndexChanged(object sender, EventArgs e)
         {
-            parent.selectedNetworkAdapter = networkAdapters.SelectedIndex;
+            SelectedLivePacketDevice = LivePacketDevice.AllLocalMachine[networkAdapters.SelectedIndex];
+            Console.WriteLine("Selected device:" + SelectedLivePacketDevice.Name);
         }
 
         private void ButtonDone_Click(object sender, EventArgs e)

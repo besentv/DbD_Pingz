@@ -144,7 +144,7 @@
             // SettingsForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(302, 146);
+            this.ClientSize = new System.Drawing.Size(302, 144);
             this.Controls.Add(this.secondsToTimeoutNumericUpDown);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label4);
