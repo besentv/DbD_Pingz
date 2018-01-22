@@ -29,6 +29,7 @@ namespace DbD_Pingz
     public class PingReciever : IDisposable
     {
         public event CalculatedPingEventHandler CalculatedPingEvent;
+        public bool IsRunning { get; private set; } = false;
 
         private bool disposed = false;
 
@@ -88,6 +89,7 @@ namespace DbD_Pingz
                 Console.WriteLine("Sniffing device \"" + deviceToSniff.Description + "\" for DbD connections.");
                 reciever.SetFilter("ip and udp");
                 reciever.ReceivePackets(0, Recieve);
+                IsRunning = true;
             }
         }
 
@@ -99,6 +101,7 @@ namespace DbD_Pingz
                 reciever.Dispose();
                 Console.WriteLine("Stopping Ping Reciever");
                 reciever = null;
+                IsRunning = false;
             }
         }
 

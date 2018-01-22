@@ -33,13 +33,62 @@ namespace DbD_Pingz
         private void NetworkAdapters_SelectedIndexChanged(object sender, EventArgs e)
         {
             SelectedLivePacketDevice = LivePacketDevice.AllLocalMachine[networkAdapters.SelectedIndex];
-            Console.WriteLine("Selected device:" + SelectedLivePacketDevice.Name);
         }
 
         private void ButtonDone_Click(object sender, EventArgs e)
         {
+            if (SelectedLivePacketDevice != null)
+            {
+                Console.WriteLine("Selected device:" + SelectedLivePacketDevice.Name);
+            }
             this.DialogResult = DialogResult.OK;
             this.Close();
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+            switch (m.Msg)
+            {
+                case 0x84: //WM_NCHITTEST
+                    HitTest hit = (HitTest)m.Result.ToInt32();
+                    switch (hit)
+                    {
+                        case HitTest.Top:
+                            m.Result = new IntPtr((int)HitTest.Caption);
+                            break;
+                        case HitTest.Bottom:
+                            m.Result = new IntPtr((int)HitTest.Client);
+                            break;
+                        case HitTest.TopLeft:
+                            m.Result = new IntPtr((int)HitTest.Left);
+                            break;
+                        case HitTest.BottomLeft:
+                            m.Result = new IntPtr((int)HitTest.Left);
+                            break;
+                        case HitTest.TopRight:
+                            m.Result = new IntPtr((int)HitTest.Right);
+                            break;
+                        case HitTest.BottomRight:
+                            m.Result = new IntPtr((int)HitTest.Right);
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        enum HitTest
+        {
+            Client = 1,
+            Caption = 2,
+            Left = 10,
+            Right = 11,
+            Top = 12,
+            TopLeft = 13,
+            TopRight = 14,
+            Bottom = 15,
+            BottomLeft = 16,
+            BottomRight = 17,
         }
     }
 }

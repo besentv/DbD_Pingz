@@ -14,11 +14,13 @@ namespace DbD_Pingz
             this.maxGoodPingNumericUpDown.Value = settings.MaximumGoodPing;
             this.secondsToTimeoutNumericUpDown.Value = settings.SecondsUntilIPTimeout;
             this.chooseBadPingColorButton.BackColor = settings.BadPingColor;
-            this.chooseGoodPingColorButton.BackColor = settings.GoodPingColor;      
+            this.chooseGoodPingColorButton.BackColor = settings.GoodPingColor;
+            this.timeoutedIpRemoveNumericUpDown.Value = settings.SecondsUntilTimeoutedIpRemoved;
         }
 
         private void ChooseGoodPingColorButton_Click(object sender, EventArgs e)
         {
+            colorDialog1.Color = settings.GoodPingColor;
             colorDialog1.ShowDialog();
             settings.SetGoodPingColor(colorDialog1.Color);
             this.chooseGoodPingColorButton.BackColor = settings.GoodPingColor;
@@ -26,6 +28,7 @@ namespace DbD_Pingz
 
         private void ChooseBadPingColorButton_Click(object sender, EventArgs e)
         {
+            colorDialog1.Color = settings.BadPingColor;
             colorDialog1.ShowDialog();
             settings.SetBadPingColor(colorDialog1.Color);
             this.chooseBadPingColorButton.BackColor = settings.BadPingColor;

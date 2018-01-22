@@ -13,18 +13,26 @@ namespace DbD_Pingz
         public Color GoodPingColor { get { return ColorTranslator.FromHtml(GoodPingColorHtml); } private set { } }
         [XmlIgnore]
         public Color BadPingColor { get { return ColorTranslator.FromHtml(BadPingColorHtml); } private set { } }
-        [XmlElement("goodPingColorHtml")]
+        [XmlElement("BoodPingColorHtml")]
         public string GoodPingColorHtml { get; set; }
-        [XmlElement("badPingColorHtml")]
+        [XmlElement("BadPingColorHtml")]
         public string BadPingColorHtml { get; set; }
         [XmlElement("SecondsUntilIPTimeout")]
         public int SecondsUntilIPTimeout { get; set; }
-        [XmlElement("MainWindowSplitterDistance")]
-        public int MainWindowSplitterDistance { get; set; }
+        [XmlElement("MainWindowSplitter1Distance")]
+        public int MainWindowSplitter1Distance { get; set; }
+        [XmlElement("MainWindowSplitter2Distance")]
+        public int MainWindowSplitter2Distance { get; set; }
         [XmlElement("DbDPingzIsTopmost")]
         public bool DbDPingzIsTopmost { get; set; }
-        [XmlElement("PingInfoChartSize")]
-        public int PingInfoChartSize { get; set; }
+        [XmlElement("PingInfoChartScale")]
+        public int PingInfoChartScale { get; set; }
+        [XmlElement("PingInfoFormSize")]
+        public Size PingInfoFormSize { get; set; }
+        [XmlElement("NetworkAdapterId")]
+        public string NetworkAdapterId { get; set; }
+        [XmlElement("SecondsUntilTimeoutRemoved")]
+        public int SecondsUntilTimeoutedIpRemoved { get; set; }
 
         public Settings()
         {
@@ -32,9 +40,12 @@ namespace DbD_Pingz
             SetBadPingColor(Color.Red);
             SetGoodPingColor(Color.LightGreen);
             SecondsUntilIPTimeout = 5;
-            MainWindowSplitterDistance = 120;
+            MainWindowSplitter1Distance = 140;
+            MainWindowSplitter2Distance = 280;
             DbDPingzIsTopmost = false;
-            PingInfoChartSize = 250;
+            PingInfoChartScale = 250;
+            PingInfoFormSize = new Size(830,570);
+            SecondsUntilTimeoutedIpRemoved = 3;
         }
 
         public void SetGoodPingColor(Color color)

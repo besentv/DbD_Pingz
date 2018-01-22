@@ -35,5 +35,10 @@ namespace DbD_Pingz
             response.Close();
             return content;
         }
+
+        private void toolStripButton1_Click(object sender, System.EventArgs e)
+        {
+            Clipboard.SetText(whoisText.Text);
+        }
     }
 }

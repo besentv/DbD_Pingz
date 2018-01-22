@@ -18,19 +18,23 @@ namespace DbD_Pingz
         static extern bool AllocConsole();
 
         private DataGridView.HitTestInfo lastHitItem;
+        
 
         private const string saveXMLFileName = "DbD_PingTestSave.xml";
         private Settings settings;
-        PingReciever pingReciever;
+        PingReciever pingReciever = new PingReciever();
 
         private delegate void accessPingInfoControlsSafely(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime);
         private ConcurrentDictionary<IpV4Address, Ping> pingList = new ConcurrentDictionary<IpV4Address, Ping>();
+        private Dictionary<String, IpWhois> ipWhoisList = new Dictionary<String, IpWhois>();
         private List<accessPingInfoControlsSafely> pingInformationSubscriberList = new List<accessPingInfoControlsSafely>();
         int chartCounter = 0;
+        private int secondsUntilPinglistRemove;
 
         public PingInfo(string[] args)
         {
             InitializeComponent();
+            previousPingInfoList.Columns[2].DefaultCellStyle.NullValue = null;
             if (args.Length > 0)
             {
                 if (args[0].Contains("console"))
@@ -40,59 +44,83 @@ namespace DbD_Pingz
                 }
             }
 
-            settings = Settings.LoadSettingsFromXML(saveXMLFileName);
-            if (settings == null)
-            {
-                settings = new Settings();
-                Settings.WriteSettingsToXML(saveXMLFileName, settings);
-            }
-
-            this.splitContainer1.SplitterDistance = settings.MainWindowSplitterDistance;
-            this.TopMost = settings.DbDPingzIsTopmost;
-            this.pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size = settings.PingInfoChartSize;
-            this.pingInfoChart.ChartAreas[0].AxisY.Interval = (pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size / 10);
-            pingInfoChart.ChartAreas[0].AxisX.ScaleView.Scroll(chartCounter);
-            this.makeDbDPingzTopmostToolStripMenuItem.Checked = settings.DbDPingzIsTopmost;
-
-
-
-            this.pingInfoChart.MouseWheel += new MouseEventHandler(pingInfoChart_MouseWheel);
+            loadSettings();
 
             pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.PingInfoChartSetPings));
             pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.PingInfoListSetPings));
+            pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.previousPingInfoList_SetPings));
 
-            pingReciever = new PingReciever();
             pingReciever.CalculatedPingEvent += new CalculatedPingEventHandler(this.GetPings);
+            pingInfoChart.MouseWheel += new MouseEventHandler(pingInfoChart_MouseWheel);
 
             ChangeNetworkAdapter();
         }
 
-        public void ChangeNetworkAdapter()
+        private void loadSettings()
+        {
+            settings = Settings.LoadSettingsFromXML(saveXMLFileName);
+            if (settings == null)
+            {
+                Console.WriteLine("Settings null... writing new.");
+                settings = new Settings();
+                Settings.WriteSettingsToXML(saveXMLFileName, settings);
+            }
+
+            this.Size = settings.PingInfoFormSize;
+            Console.WriteLine("Splitter1 distance:" + settings.MainWindowSplitter1Distance);
+            Console.WriteLine("Splitter2 distance:" + settings.MainWindowSplitter2Distance);
+            this.splitContainer2.SplitterDistance = settings.MainWindowSplitter2Distance;
+            this.splitContainer1.SplitterDistance = settings.MainWindowSplitter1Distance;
+
+
+
+            this.TopMost = settings.DbDPingzIsTopmost;
+            this.makeDbDPingzTopmostToolStripMenuItem.Checked = settings.DbDPingzIsTopmost;
+            this.secondsUntilPinglistRemove = settings.SecondsUntilTimeoutedIpRemoved;
+
+            this.pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size = settings.PingInfoChartScale;
+            this.pingInfoChart.ChartAreas[0].AxisY.Interval = (pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size / 10);
+            this.pingInfoChart.ChartAreas[0].AxisX.ScaleView.Scroll(chartCounter);
+
+        }
+
+        private void saveSettings()
+        {
+            settings.PingInfoChartScale = (int)pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size;
+            settings.DbDPingzIsTopmost = this.TopMost;
+            settings.PingInfoFormSize = this.Size;
+            settings.MainWindowSplitter1Distance = splitContainer1.SplitterDistance;
+            settings.MainWindowSplitter2Distance = splitContainer2.SplitterDistance;
+            Settings.WriteSettingsToXML(saveXMLFileName, settings);
+        }
+
+        private void ChangeNetworkAdapter()
         {
             pingReciever.TryStopPingReciever();
             NetworkChooser networkChooser = new NetworkChooser();
             do
             {
                 networkChooser.ShowDialog(this);
+                if (networkChooser.DialogResult == DialogResult.Cancel)
+                {
+                    Console.WriteLine("No network adapter selected!");
+                    pingInfoChart.Hide();
+                    pingInfoList.Hide();
+                    labelNoAdapter1.Show();
+                    labelNoAdapter2.Show();
+                    dataTicker.Enabled = false;
+                    return;
+                }
             } while ((networkChooser.SelectedLivePacketDevice == null) || (networkingBackgroundWorker.IsBusy));
             networkingBackgroundWorker.RunWorkerAsync(networkChooser.SelectedLivePacketDevice);
-
+            pingInfoChart.Show();
+            pingInfoList.Show();
+            labelNoAdapter1.Hide();
+            labelNoAdapter2.Hide();
+            dataTicker.Enabled = true;
         }
 
-        public void Sniff(object sender, DoWorkEventArgs e)
-        {
-            pingReciever.StartPingReciever((LivePacketDevice)e.Argument);
-        }
-
-        private void OnFormClosed(object sender, FormClosedEventArgs e)
-        {
-            settings.PingInfoChartSize = (int)pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size;
-            settings.DbDPingzIsTopmost = this.TopMost;
-            Settings.WriteSettingsToXML(saveXMLFileName, settings);
-            networkingBackgroundWorker.CancelAsync();
-        }
-
-        #region Ping info controls management
+        #region Ping Info Controls Management
         public void GetPings(object sender, Ping ping)
         {
             this.FillPingList(ping);
@@ -125,14 +153,51 @@ namespace DbD_Pingz
             foreach (IpV4Address ip in pingList.Keys)
             {
                 TimeSpan timeSinceLastRecievedPackage = DateTime.Now - pingList[ip].RecievedPacketTime;
-                if (timeSinceLastRecievedPackage.Seconds > settings.SecondsUntilIPTimeout)
+                if (timeSinceLastRecievedPackage.Seconds >= settings.SecondsUntilIPTimeout)
                 {
-                    if (pingList.TryRemove(ip, out Ping ignored))
+                    Console.WriteLine("Ip:" + ip.ToString() + " timed out! Will be removed in:" + ((settings.SecondsUntilIPTimeout + secondsUntilPinglistRemove) - timeSinceLastRecievedPackage.Seconds) + "seconds.");
+                    if (timeSinceLastRecievedPackage.Seconds >= (settings.SecondsUntilIPTimeout + secondsUntilPinglistRemove))
                     {
-                        Console.WriteLine("Ip:" + ip.ToString() + " timed out!");
+                        if (pingList.TryRemove(ip, out Ping ignored))
+                        {
+                            Console.WriteLine("Ip:" + ip.ToString() + " was removed from pinglist!");
+                        }
                     }
                 }
             }
+        }
+
+        private void previousPingInfoList_SetPings(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime)
+        {
+            foreach (IpV4Address address in pingList.Keys)
+            {
+                bool containsKey = false;
+                foreach (DataGridViewRow row in previousPingInfoList.Rows)
+                {
+                    String rowIpString = row.Cells[0].Value.ToString();
+                        if (row.Cells[2].Value == null)
+                            if (ipWhoisList.ContainsKey(rowIpString))
+                                if (ipWhoisList[rowIpString].JsonParsed)
+                                {
+                                    if (ipWhoisList[rowIpString].CountryFlag != null)
+                                    {
+                                        row.Cells[2].Value = ipWhoisList[rowIpString].CountryFlag;
+                                    }
+                                    ipWhoisList.Remove(rowIpString);
+                                }
+                    if (row.Cells[0].Value.ToString().Contains(address.ToString()))
+                    {
+                        row.Cells[1].Value = accessTime.ToString("HH:mm:ss");
+                        containsKey = true;
+                    }
+                }
+                if (!containsKey)
+                {
+                    previousPingInfoList.Rows.Add(new object[] { address.ToString(), accessTime.ToString("HH:mm:ss"), null});
+                    ipWhoisList.Add(address.ToString(), new IpWhois(address.ToString()));
+                }
+            }
+            previousPingInfoList.Sort(previousPingInfoList.Columns[1], ListSortDirection.Descending);
         }
 
         private void PingInfoListSetPings(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime)
@@ -162,7 +227,7 @@ namespace DbD_Pingz
                             {
                                 if (timedOut)
                                 {
-                                    if (timeSincePacketRecieve.Seconds > (settings.SecondsUntilIPTimeout))
+                                    if (timeSincePacketRecieve.Seconds >= (settings.SecondsUntilIPTimeout + secondsUntilPinglistRemove))
                                     {
                                         rowsToDelete.Add(row);
                                     }
@@ -213,12 +278,6 @@ namespace DbD_Pingz
             }
         }
 
-        private void PingInfoList_SelectionChanged(object sender, EventArgs e)
-        {
-            pingInfoList.ClearSelection();
-
-        }
-
         private void PingInfoChartSetPings(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime)
         {
             if (pingInfoChart.InvokeRequired)
@@ -244,7 +303,7 @@ namespace DbD_Pingz
                         {
                             bool timedOut = false;
                             TimeSpan timeSincePacketRecieve = accessTime - pingList[ip].RecievedPacketTime;
-                            if (timeSincePacketRecieve.Seconds > settings.SecondsUntilIPTimeout)
+                            if (timeSincePacketRecieve.Seconds >= (settings.SecondsUntilIPTimeout + secondsUntilPinglistRemove))
                             {
                                 timedOut = true;
                             }
@@ -315,17 +374,15 @@ namespace DbD_Pingz
         #endregion
 
         #region Listeners
-        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-            SplitContainer splitContainer = (SplitContainer)sender;
-            settings.MainWindowSplitterDistance = splitContainer.SplitterDistance;
-        }
 
         private void ipRightKlickMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             if (e.ClickedItem.Text == "Whois this IP")
             {
-                new WhoisInfo(pingInfoList[lastHitItem.ColumnIndex, lastHitItem.RowIndex].Value.ToString()).ShowDialog(this);
+                if (pingInfoList.Rows.Count > lastHitItem.RowIndex)
+                {
+                    new WhoisInfo(pingInfoList[lastHitItem.ColumnIndex, lastHitItem.RowIndex].Value.ToString()).ShowDialog(this);
+                }
             }
             if (e.ClickedItem.Text == "Reset table")
             {
@@ -404,12 +461,76 @@ namespace DbD_Pingz
         {
             this.ActiveControl = null;
         }
-        #endregion
 
         private void changeNetworkAdapterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ChangeNetworkAdapter();
         }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new About(DbDPingz.buildtype).ShowDialog(this);
+        }
+        private void networkingBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            pingReciever.StartPingReciever((LivePacketDevice)e.Argument);
+        }
+
+
+        private void PingInfoList_SelectionChanged(object sender, EventArgs e)
+        {
+            pingInfoList.ClearSelection();
+
+        }
+
+        private void previousPingInfoList_SelectionChanged(object sender, EventArgs e)
+        {
+            previousPingInfoList.ClearSelection();
+        }
+
+        private void previousPingInfoList_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                DataGridView.HitTestInfo hit = previousPingInfoList.HitTest(e.X, e.Y);
+                lastHitItem = hit;
+                Console.WriteLine("Row index:" + hit.RowIndex + " ColumnIndex:" + hit.ColumnIndex);
+                if (hit.ColumnIndex == 0 && hit.RowIndex >= 0)
+                {
+                    previousPingInfoContextMenu.Items[0].Visible = true;
+                    previousPingInfoList.ClearSelection();
+                    previousPingInfoList[hit.ColumnIndex, hit.RowIndex].Selected = true;
+                    previousPingInfoContextMenu.Show(previousPingInfoList, e.Location);
+                }
+                else
+                {
+                    previousPingInfoContextMenu.Items[0].Visible = false;
+                    previousPingInfoContextMenu.Show(previousPingInfoList, e.Location);
+                }
+            }
+        }
+
+        private void previousPingInfoContextMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem == whoisThisIPToolStripMenuItem)
+            {
+                if (previousPingInfoList.Rows.Count > lastHitItem.RowIndex)
+                {
+                    new WhoisInfo(previousPingInfoList[lastHitItem.ColumnIndex, lastHitItem.RowIndex].Value.ToString()).ShowDialog(this);
+                }
+            }
+            else if (e.ClickedItem == resetTableToolStripMenuItem1)
+            {
+                previousPingInfoList.Rows.Clear();
+            }
+        }
+
+        private void PingInfo_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            networkingBackgroundWorker.CancelAsync();
+            saveSettings();
+        }
+        #endregion
     }
 }
 
