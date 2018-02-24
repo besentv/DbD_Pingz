@@ -32,6 +32,7 @@
             this.networkAdapters = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonDone = new System.Windows.Forms.Button();
+            this.rememberDecisionCheckbox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // networkAdapters
@@ -70,11 +71,23 @@
             this.buttonDone.UseVisualStyleBackColor = true;
             this.buttonDone.Click += new System.EventHandler(this.ButtonDone_Click);
             // 
+            // rememberDecisionCheckbox
+            // 
+            this.rememberDecisionCheckbox.AutoSize = true;
+            this.rememberDecisionCheckbox.Location = new System.Drawing.Point(12, 54);
+            this.rememberDecisionCheckbox.Name = "rememberDecisionCheckbox";
+            this.rememberDecisionCheckbox.Size = new System.Drawing.Size(119, 17);
+            this.rememberDecisionCheckbox.TabIndex = 5;
+            this.rememberDecisionCheckbox.Text = "Remember decision";
+            this.rememberDecisionCheckbox.UseVisualStyleBackColor = true;
+            this.rememberDecisionCheckbox.CheckedChanged += new System.EventHandler(this.rememberDecisionCheckbox_CheckedChanged);
+            // 
             // NetworkChooser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(391, 86);
+            this.Controls.Add(this.rememberDecisionCheckbox);
             this.Controls.Add(this.buttonDone);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.networkAdapters);
@@ -96,5 +109,6 @@
         private System.Windows.Forms.ComboBox networkAdapters;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button buttonDone;
+        private System.Windows.Forms.CheckBox rememberDecisionCheckbox;
     }
 }

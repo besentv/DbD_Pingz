@@ -5,12 +5,12 @@ namespace DbD_Pingz
 {
     public partial class SettingsForm : Form
     {
-        private Settings settings = null;
+        public Settings Settings { get; private set; } = null;
 
         public SettingsForm(Settings settings)
         {
             InitializeComponent();
-            this.settings = settings;
+            this.Settings = settings;
             this.maxGoodPingNumericUpDown.Value = settings.MaximumGoodPing;
             this.secondsToTimeoutNumericUpDown.Value = settings.SecondsUntilIPTimeout;
             this.chooseBadPingColorButton.BackColor = settings.BadPingColor;
@@ -20,30 +20,36 @@ namespace DbD_Pingz
 
         private void ChooseGoodPingColorButton_Click(object sender, EventArgs e)
         {
-            colorDialog1.Color = settings.GoodPingColor;
+            colorDialog1.Color = Settings.GoodPingColor;
             colorDialog1.ShowDialog();
-            settings.SetGoodPingColor(colorDialog1.Color);
-            this.chooseGoodPingColorButton.BackColor = settings.GoodPingColor;
+            Settings.SetGoodPingColor(colorDialog1.Color);
+            this.chooseGoodPingColorButton.BackColor = Settings.GoodPingColor;
         }
 
         private void ChooseBadPingColorButton_Click(object sender, EventArgs e)
         {
-            colorDialog1.Color = settings.BadPingColor;
+            colorDialog1.Color = Settings.BadPingColor;
             colorDialog1.ShowDialog();
-            settings.SetBadPingColor(colorDialog1.Color);
-            this.chooseBadPingColorButton.BackColor = settings.BadPingColor;
+            Settings.SetBadPingColor(colorDialog1.Color);
+            this.chooseBadPingColorButton.BackColor = Settings.BadPingColor;
         }
 
         private void MaximumGoodPingNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
             NumericUpDown num = (NumericUpDown)sender;
-            settings.MaximumGoodPing = Convert.ToInt32(num.Value);
+            Settings.MaximumGoodPing = Convert.ToInt32(num.Value);
         }
 
         private void SecondsToTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
             NumericUpDown num = (NumericUpDown)sender;
-            settings.SecondsUntilIPTimeout = Convert.ToInt32(num.Value);
+            Settings.SecondsUntilIPTimeout = Convert.ToInt32(num.Value);
+        }
+
+        private void timeoutedIpRemoveNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            NumericUpDown num = (NumericUpDown)sender;
+            Settings.SecondsUntilTimeoutedIpRemoved = Convert.ToInt32(num.Value);
         }
     }
 }

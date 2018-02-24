@@ -7,7 +7,7 @@ namespace DbD_Pingz
 {
     class CountryIdConverter
     {
-        private static readonly Dictionary<string, string> _englishNameByIso2 = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        private static readonly Dictionary<string, string> EnglishCountryNameByIso2 = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
            //images for non-ISO 3166-1 flags: an, catalonia, cs, en, eu, scotland, wales are not used
 
@@ -263,14 +263,14 @@ namespace DbD_Pingz
             {"ZW", "Zimbabwe"}
         };
 
-        public static bool TryGetName(string countryIdIso2, out string name) => _englishNameByIso2.TryGetValue(countryIdIso2, out name);
+        public static bool TryGetName(string countryIdIso2, out string name) => EnglishCountryNameByIso2.TryGetValue(countryIdIso2, out name);
 
         public static Image ConvertCountryIdToFlagImage(string countryIdIso2)
         {
             if (countryIdIso2 == null)
                 return null;
 
-            string path = @"\Images\" + countryIdIso2.ToLower() + ".png";
+            string path = @"\flags\" + countryIdIso2.ToLower() + ".png";
             Image countryFlag;
             try
             {

@@ -33,8 +33,8 @@ namespace DbD_Pingz
 
         private bool disposed = false;
 
+        public LivePacketDevice SniffingDevice { get; private set; } = null;
         private IpV4Address thisMachinesIpV4Address;
-        private LivePacketDevice deviceToSniff;
         private PacketCommunicator reciever;
         private Dictionary<IpV4Address, DateTime> waitingForResponse;
 
@@ -48,7 +48,7 @@ namespace DbD_Pingz
         {
             string internet = "Internet ";
             string ownIpString;
-            foreach (DeviceAddress address in deviceToSniff.Addresses)
+            foreach (DeviceAddress address in SniffingDevice.Addresses)
             {
                 Console.WriteLine("Local IP:" + address.Address);
                 if (address.Address.Family == SocketAddressFamily.Internet)
@@ -80,7 +80,7 @@ namespace DbD_Pingz
                     Console.WriteLine("NULL2");
                     return;
                 }
-                this.deviceToSniff = deviceToSniff;
+                this.SniffingDevice = deviceToSniff;
                 if (!TryParseOwnIpV4Address(deviceToSniff.Addresses, out thisMachinesIpV4Address))
                 {
                     return;

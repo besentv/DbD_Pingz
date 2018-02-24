@@ -170,6 +170,7 @@
             0,
             0,
             0});
+            this.timeoutedIpRemoveNumericUpDown.ValueChanged += new System.EventHandler(this.timeoutedIpRemoveNumericUpDown_ValueChanged);
             // 
             // SettingsForm
             // 

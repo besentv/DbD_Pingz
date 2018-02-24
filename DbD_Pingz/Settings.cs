@@ -5,6 +5,8 @@ using System;
 
 namespace DbD_Pingz
 {
+    public delegate void ChangedSettingsDelegate(object sender);
+
     public class Settings
     {
         [XmlElement("MaximumGoodPing")]
@@ -29,10 +31,10 @@ namespace DbD_Pingz
         public int PingInfoChartScale { get; set; }
         [XmlElement("PingInfoFormSize")]
         public Size PingInfoFormSize { get; set; }
-        [XmlElement("NetworkAdapterId")]
-        public string NetworkAdapterId { get; set; }
         [XmlElement("SecondsUntilTimeoutRemoved")]
         public int SecondsUntilTimeoutedIpRemoved { get; set; }
+        [XmlElement("LastNetworkAdapter")]
+        public string LastNetworkAdapterName { get; set; }
 
         public Settings()
         {
@@ -46,6 +48,7 @@ namespace DbD_Pingz
             PingInfoChartScale = 250;
             PingInfoFormSize = new Size(830,570);
             SecondsUntilTimeoutedIpRemoved = 3;
+            LastNetworkAdapterName = null;
         }
 
         public void SetGoodPingColor(Color color)

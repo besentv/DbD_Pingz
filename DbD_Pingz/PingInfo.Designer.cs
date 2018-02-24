@@ -55,6 +55,7 @@
             this.Ip = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lastConnectionTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Country = new System.Windows.Forms.DataGridViewImageColumn();
+            this.IsValveISP = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.previousPingInfoContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.whoisThisIPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetTableToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -92,11 +93,11 @@
             this.pingInfoList.ReadOnly = true;
             this.pingInfoList.RowHeadersVisible = false;
             this.pingInfoList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.pingInfoList.Size = new System.Drawing.Size(524, 138);
+            this.pingInfoList.Size = new System.Drawing.Size(467, 138);
             this.pingInfoList.TabIndex = 0;
             this.pingInfoList.TabStop = false;
             this.pingInfoList.SelectionChanged += new System.EventHandler(this.PingInfoList_SelectionChanged);
-            this.pingInfoList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.list_MouseClick);
+            this.pingInfoList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.List_MouseClick);
             // 
             // ipColumn
             // 
@@ -121,7 +122,7 @@
             this.resetTableToolStripMenuItem});
             this.ipRightKlickMenu.Name = "contextMenuStrip1";
             this.ipRightKlickMenu.Size = new System.Drawing.Size(179, 48);
-            this.ipRightKlickMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.ipRightKlickMenu_ItemClicked);
+            this.ipRightKlickMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.IpRightKlickMenu_ItemClicked);
             // 
             // whoisIp
             // 
@@ -162,28 +163,28 @@
             this.makeDbDPingzTopmostToolStripMenuItem.Name = "makeDbDPingzTopmostToolStripMenuItem";
             this.makeDbDPingzTopmostToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
             this.makeDbDPingzTopmostToolStripMenuItem.Text = "DbD Pingz Is Topmost";
-            this.makeDbDPingzTopmostToolStripMenuItem.Click += new System.EventHandler(this.makeDbDPingzTopmostToolStripMenuItem_Click);
+            this.makeDbDPingzTopmostToolStripMenuItem.Click += new System.EventHandler(this.MakeDbDPingzTopmostToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItem_Click);
             // 
             // changeNetworkAdapterToolStripMenuItem
             // 
             this.changeNetworkAdapterToolStripMenuItem.Name = "changeNetworkAdapterToolStripMenuItem";
             this.changeNetworkAdapterToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
             this.changeNetworkAdapterToolStripMenuItem.Text = "Change Network Adapter";
-            this.changeNetworkAdapterToolStripMenuItem.Click += new System.EventHandler(this.changeNetworkAdapterToolStripMenuItem_Click);
+            this.changeNetworkAdapterToolStripMenuItem.Click += new System.EventHandler(this.ChangeNetworkAdapterToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
             this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
             // pingInfoChart
             // 
@@ -211,6 +212,7 @@
             chartArea1.AxisY.ScrollBar.Enabled = false;
             chartArea1.AxisY.Title = "Ping";
             chartArea1.AxisY.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            chartArea1.BorderWidth = 0;
             chartArea1.Name = "pingChartArea";
             this.pingInfoChart.ChartAreas.Add(chartArea1);
             this.pingInfoChart.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -223,11 +225,11 @@
             this.pingInfoChart.Margin = new System.Windows.Forms.Padding(0);
             this.pingInfoChart.Name = "pingInfoChart";
             this.pingInfoChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Pastel;
-            this.pingInfoChart.Size = new System.Drawing.Size(524, 316);
+            this.pingInfoChart.Size = new System.Drawing.Size(467, 316);
             this.pingInfoChart.TabIndex = 3;
             this.pingInfoChart.Text = "chart1";
-            this.pingInfoChart.MouseEnter += new System.EventHandler(this.pingInfoChart_MouseEnter);
-            this.pingInfoChart.MouseLeave += new System.EventHandler(this.pingInfoChart_MouseLeave);
+            this.pingInfoChart.MouseEnter += new System.EventHandler(this.PingInfoChart_MouseEnter);
+            this.pingInfoChart.MouseLeave += new System.EventHandler(this.PingInfoChart_MouseLeave);
             // 
             // dataTicker
             // 
@@ -253,7 +255,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.pingInfoChart);
             this.splitContainer1.Panel2.Controls.Add(this.labelNoAdapter2);
-            this.splitContainer1.Size = new System.Drawing.Size(528, 506);
+            this.splitContainer1.Size = new System.Drawing.Size(471, 506);
             this.splitContainer1.SplitterDistance = 142;
             this.splitContainer1.TabIndex = 4;
             // 
@@ -284,7 +286,7 @@
             // networkingBackgroundWorker
             // 
             this.networkingBackgroundWorker.WorkerSupportsCancellation = true;
-            this.networkingBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.networkingBackgroundWorker_DoWork);
+            this.networkingBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.NetworkingBackgroundWorker_DoWork);
             // 
             // splitContainer2
             // 
@@ -300,7 +302,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer1);
             this.splitContainer2.Size = new System.Drawing.Size(814, 506);
-            this.splitContainer2.SplitterDistance = 282;
+            this.splitContainer2.SplitterDistance = 339;
             this.splitContainer2.TabIndex = 5;
             // 
             // previousPingInfoList
@@ -308,12 +310,13 @@
             this.previousPingInfoList.AllowUserToAddRows = false;
             this.previousPingInfoList.AllowUserToDeleteRows = false;
             this.previousPingInfoList.AllowUserToResizeRows = false;
-            this.previousPingInfoList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.previousPingInfoList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.previousPingInfoList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.previousPingInfoList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Ip,
             this.lastConnectionTime,
-            this.Country});
+            this.Country,
+            this.IsValveISP});
             this.previousPingInfoList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.previousPingInfoList.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.previousPingInfoList.Location = new System.Drawing.Point(0, 0);
@@ -321,14 +324,14 @@
             this.previousPingInfoList.Name = "previousPingInfoList";
             this.previousPingInfoList.ReadOnly = true;
             this.previousPingInfoList.RowHeadersVisible = false;
-            this.previousPingInfoList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.previousPingInfoList.Size = new System.Drawing.Size(282, 506);
+            this.previousPingInfoList.Size = new System.Drawing.Size(339, 506);
             this.previousPingInfoList.TabIndex = 0;
-            this.previousPingInfoList.SelectionChanged += new System.EventHandler(this.previousPingInfoList_SelectionChanged);
-            this.previousPingInfoList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.previousPingInfoList_MouseClick);
+            this.previousPingInfoList.SelectionChanged += new System.EventHandler(this.PreviousPingInfoList_SelectionChanged);
+            this.previousPingInfoList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PreviousPingInfoList_MouseClick);
             // 
             // Ip
             // 
+            this.Ip.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Ip.HeaderText = "IP";
             this.Ip.Name = "Ip";
             this.Ip.ReadOnly = true;
@@ -336,6 +339,7 @@
             // 
             // lastConnectionTime
             // 
+            this.lastConnectionTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.lastConnectionTime.HeaderText = "Last time connected at";
             this.lastConnectionTime.Name = "lastConnectionTime";
             this.lastConnectionTime.ReadOnly = true;
@@ -348,6 +352,13 @@
             this.Country.Name = "Country";
             this.Country.ReadOnly = true;
             // 
+            // IsValveISP
+            // 
+            this.IsValveISP.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.IsValveISP.HeaderText = "Valve ISP";
+            this.IsValveISP.Name = "IsValveISP";
+            this.IsValveISP.ReadOnly = true;
+            // 
             // previousPingInfoContextMenu
             // 
             this.previousPingInfoContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -355,7 +366,7 @@
             this.resetTableToolStripMenuItem1});
             this.previousPingInfoContextMenu.Name = "previousPingInfoContextMenu";
             this.previousPingInfoContextMenu.Size = new System.Drawing.Size(179, 48);
-            this.previousPingInfoContextMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.previousPingInfoContextMenu_ItemClicked);
+            this.previousPingInfoContextMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.PreviousPingInfoContextMenu_ItemClicked);
             // 
             // whoisThisIPToolStripMenuItem
             // 
@@ -434,5 +445,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Ip;
         private System.Windows.Forms.DataGridViewTextBoxColumn lastConnectionTime;
         private System.Windows.Forms.DataGridViewImageColumn Country;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn IsValveISP;
     }
 }

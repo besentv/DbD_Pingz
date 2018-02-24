@@ -22,7 +22,7 @@ namespace DbD_Pingz
     class IpWhois
     {
         public string whoisInfoString { get; private set; }
-        public bool JsonParsed { get; private set; } = false;
+        public bool isJsonParsed { get; private set; } = false;
         public Image CountryFlag { get; private set; } = null;
         public string CountryName { get; private set; } = "";
         public IpWhoisInfo ipWhoisInfo;
@@ -52,7 +52,7 @@ namespace DbD_Pingz
                 CountryName = countryName;
             }
             Console.WriteLine("GOT whois info");
-            JsonParsed = true;
+            isJsonParsed = true;
         }
 
         private string getWhoisInfo(string requestUrl)
