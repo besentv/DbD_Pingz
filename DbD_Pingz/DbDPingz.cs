@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Windows.Forms;
 
 namespace DbD_Pingz
@@ -7,7 +6,7 @@ namespace DbD_Pingz
     class DbDPingz
     {
         public const string version = "1.2.*";
-        public const string buildtype = "BETA";
+        public const string buildtype = "RELEASE";
         [STAThread]
         static void Main(string[] args)
         {
