@@ -46,19 +46,20 @@ namespace DbD_Pingz
 
             LoadSettings(); //ALWAYS LOAD SETTINGS BEFORE YOU ACCESS ANYTING ELSE !!!
 
-            maxGoodPingLine.BackColor = Color.HotPink;
-            maxGoodPingLine.Interval = 0;
-            maxGoodPingLine.StripWidth = 1;
+            //maxGoodPingLine.BackColor = Color.HotPink;
+            //maxGoodPingLine.Interval = 0;
+            //maxGoodPingLine.StripWidth = 1;
             previousPingInfoList.Columns[2].DefaultCellStyle.NullValue = null;
             //maxGoodPingLine.Text = "Max. Good Ping";
 
-            pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.PingInfoChartSetPings));
-            pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.PingInfoListSetPings));
+            pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.PingInfoChart_SetPings)); //Chart first to get the line colors!
+            pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.PingInfoList_SetPings));
             pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.PreviousPingInfoList_SetPings));
 
             pingReciever.CalculatedPingEvent += new CalculatedPingEventHandler(this.GetPings);
             pingInfoChart.MouseWheel += new MouseEventHandler(PingInfoChart_MouseWheel);
-            pingInfoChart.ChartAreas[0].AxisY.StripLines.Add(maxGoodPingLine);
+            //pingInfoChart.ChartAreas[0].AxisY.StripLines.Add(maxGoodPingLine);
+            pingInfoChart.ChartAreas[0].Position = new ElementPosition(0, 0, 100, 100); //Less whitespace around the chart
 
             ChangeNetworkAdapter(false);                                                                //Load previous network adapter
         }
@@ -199,6 +200,19 @@ namespace DbD_Pingz
                 foreach (DataGridViewRow row in previousPingInfoList.Rows)
                 {
                     String rowIpString = row.Cells[0].Value.ToString();
+                    IpV4Address rowIpV4Address;
+                    if (IpV4Address.TryParse(rowIpString,out rowIpV4Address))
+                    {
+                        Color chartIpColor;
+                        if (GetPingInfoChartSeriesColor(rowIpV4Address, out chartIpColor))
+                        {
+                            row.Cells[0].Style.BackColor = chartIpColor;
+                        }
+                        else
+                        {
+                            row.Cells[0].Style.BackColor = Color.White;
+                        }
+                    }
                     if (row.Cells[2].Value == null)
                         if (ipWhoisList.ContainsKey(rowIpString))
                             if (ipWhoisList[rowIpString].isJsonParsed)
@@ -229,11 +243,11 @@ namespace DbD_Pingz
             previousPingInfoList.Sort(previousPingInfoList.Columns[1], ListSortDirection.Descending);
         }
 
-        private void PingInfoListSetPings(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime)
+        private void PingInfoList_SetPings(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime)
         {
             if (pingInfoList.InvokeRequired)
             {
-                accessPingInfoControlsSafely caller = new accessPingInfoControlsSafely(PingInfoListSetPings);
+                accessPingInfoControlsSafely caller = new accessPingInfoControlsSafely(PingInfoList_SetPings);
                 this.Invoke(caller, new object[] { pingList, accessTime });
             }
             else
@@ -307,11 +321,11 @@ namespace DbD_Pingz
             }
         }
 
-        private void PingInfoChartSetPings(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime)
+        private void PingInfoChart_SetPings(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime)
         {
             if (pingInfoChart.InvokeRequired)
             {
-                accessPingInfoControlsSafely caller = new accessPingInfoControlsSafely(PingInfoChartSetPings);
+                accessPingInfoControlsSafely caller = new accessPingInfoControlsSafely(PingInfoChart_SetPings);
                 this.Invoke(caller, new object[] { pingList, accessTime });
             }
             else
@@ -561,5 +575,10 @@ namespace DbD_Pingz
             SaveSettings();
         }
         #endregion
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

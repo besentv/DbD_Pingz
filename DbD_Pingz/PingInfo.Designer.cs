@@ -59,6 +59,7 @@
             this.previousPingInfoContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.whoisThisIPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetTableToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pingInfoList)).BeginInit();
             this.ipRightKlickMenu.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -152,7 +153,8 @@
             this.makeDbDPingzTopmostToolStripMenuItem,
             this.settingsToolStripMenuItem,
             this.changeNetworkAdapterToolStripMenuItem,
-            this.aboutToolStripMenuItem});
+            this.aboutToolStripMenuItem,
+            this.exitToolStripMenuItem});
             this.programToolStripMenuItem.Name = "programToolStripMenuItem";
             this.programToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
             this.programToolStripMenuItem.Text = "Program";
@@ -380,6 +382,13 @@
             this.resetTableToolStripMenuItem1.Size = new System.Drawing.Size(178, 22);
             this.resetTableToolStripMenuItem1.Text = "Reset Table";
             // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // PingInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -446,5 +455,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn lastConnectionTime;
         private System.Windows.Forms.DataGridViewImageColumn Country;
         private System.Windows.Forms.DataGridViewCheckBoxColumn IsValveISP;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
