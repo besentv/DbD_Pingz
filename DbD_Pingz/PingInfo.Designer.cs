@@ -44,6 +44,7 @@
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeNetworkAdapterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pingInfoChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dataTicker = new System.Windows.Forms.Timer(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -59,7 +60,6 @@
             this.previousPingInfoContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.whoisThisIPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetTableToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pingInfoList)).BeginInit();
             this.ipRightKlickMenu.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -187,6 +187,13 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // pingInfoChart
             // 
@@ -381,13 +388,6 @@
             this.resetTableToolStripMenuItem1.Name = "resetTableToolStripMenuItem1";
             this.resetTableToolStripMenuItem1.Size = new System.Drawing.Size(178, 22);
             this.resetTableToolStripMenuItem1.Text = "Reset Table";
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // PingInfo
             // 

@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("DbD_Pingz")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration(DbD_Pingz.DbDPingz.buildtype)]
-[assembly: AssemblyCompany("besentv")]
+[assembly: AssemblyCompany("besentv.xyz")]
 [assembly: AssemblyProduct("DbD_Pingz")]
 [assembly: AssemblyCopyright("Release under EUPL software licence")]
 [assembly: AssemblyTrademark("")]
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion(DbD_Pingz.DbDPingz.version)]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion(DbD_Pingz.DbDPingz.version + ".*")]
+[assembly: AssemblyFileVersion(DbD_Pingz.DbDPingz.version)]

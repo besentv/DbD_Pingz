@@ -191,6 +191,7 @@
             this.Name = "SettingsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SettingsForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.maxGoodPingNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.secondsToTimeoutNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutedIpRemoveNumericUpDown)).EndInit();

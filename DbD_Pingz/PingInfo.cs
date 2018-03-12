@@ -21,7 +21,7 @@ namespace DbD_Pingz
         private DataGridView.HitTestInfo lastHitItem;
         private StripLine maxGoodPingLine = new StripLine();
 
-        private const string saveXMLFileName = "DbD_PingTestSave.xml";
+        
         private Settings settings;
 
         private PingReciever pingReciever = new PingReciever();
@@ -66,12 +66,13 @@ namespace DbD_Pingz
 
         private void LoadSettings()
         {
-            settings = Settings.LoadSettingsFromXML(saveXMLFileName);
+            settings = Settings.LoadSettingsFromXML(DbDPingz.saveXMLFileName);
             if (settings == null)
             {
                 Console.WriteLine("Settings null... writing new.");
                 settings = new Settings();
-                Settings.WriteSettingsToXML(saveXMLFileName, settings);
+                settings.onSettingsChanged += Settings_onSettingsChanged;
+                Settings.WriteSettingsToXML(DbDPingz.saveXMLFileName, settings);
             }
 
             this.Size = settings.PingInfoFormSize;
@@ -87,20 +88,6 @@ namespace DbD_Pingz
             this.pingInfoChart.ChartAreas[0].AxisY.Interval = (pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size / 10);
             this.pingInfoChart.ChartAreas[0].AxisX.ScaleView.Scroll(chartCounter);
             this.maxGoodPingLine.IntervalOffset = settings.MaximumGoodPing;
-        }
-
-        private void SaveSettings()
-        {
-            settings.PingInfoChartScale = (int)pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size;
-            settings.DbDPingzIsTopmost = this.TopMost;
-            settings.PingInfoFormSize = this.Size;
-            settings.MainWindowSplitter1Distance = splitContainer1.SplitterDistance;
-            settings.MainWindowSplitter2Distance = splitContainer2.SplitterDistance;
-            if (!(pingReciever.SniffingDevice == null))
-            {
-                settings.LastNetworkAdapterName = pingReciever.SniffingDevice.Name;
-            }
-            Settings.WriteSettingsToXML(saveXMLFileName, settings);
         }
 
         private void ChangeNetworkAdapter(bool forceChange)
@@ -128,11 +115,11 @@ namespace DbD_Pingz
                 livePacketDevice = networkChooser.SelectedLivePacketDevice;
                 if (networkChooser.RememberDecision)
                 {
-                    settings.LastNetworkAdapterName = livePacketDevice.Name;
+                    settings.LastNetworkAdapterName = (livePacketDevice.Name);
                 }
                 else
                 {
-                    settings.LastNetworkAdapterName = null;
+                    settings.LastNetworkAdapterName = (null);
                 }
             }
             pingInfoChart.Show();
@@ -220,6 +207,7 @@ namespace DbD_Pingz
                                 if (ipWhoisList[rowIpString].CountryFlag != null)
                                 {
                                     row.Cells[2].Value = ipWhoisList[rowIpString].CountryFlag;
+                                    row.Cells[2].ToolTipText = ipWhoisList[rowIpString].CountryName;
                                 }
                                 if (ipWhoisList[rowIpString].ipWhoisInfo.Org.ToLower().Contains("valve"))
                                 {
@@ -401,6 +389,10 @@ namespace DbD_Pingz
                     pingInfoChart.Series.ResumeUpdates();
                     chartCounter++;
                 }
+                else
+                {
+                    
+                }
             }
         }
         private bool GetPingInfoChartSeriesColor(IpV4Address ip, out Color color)
@@ -472,7 +464,6 @@ namespace DbD_Pingz
         {
             SettingsForm settingsForm = new SettingsForm(settings);
             settingsForm.ShowDialog(this);
-            Settings.WriteSettingsToXML(saveXMLFileName, settingsForm.Settings);
         }
 
         private void PingInfoChart_MouseWheel(object sender, MouseEventArgs e)
@@ -488,7 +479,7 @@ namespace DbD_Pingz
             }
             else if (e.Delta < 0)
             {
-                if (pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size <= 490)
+                if (pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size <= 990)
                 {
                     pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size += 10;
                     pingInfoChart.ChartAreas[0].AxisY.Interval = (pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size / 10);
@@ -572,13 +563,19 @@ namespace DbD_Pingz
         private void PingInfo_FormClosing(object sender, FormClosingEventArgs e)
         {
             networkingBackgroundWorker.CancelAsync();
-            SaveSettings();
+            Settings.WriteSettingsToXML(DbDPingz.saveXMLFileName, settings);
         }
-        #endregion
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+
+        private void Settings_onSettingsChanged(object sender, PropertyChangedEventArgs e)
+        {
+            this.settings = (Settings)sender;
+        }
+
+        #endregion
     }
 }

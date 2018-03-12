@@ -5,12 +5,12 @@ namespace DbD_Pingz
 {
     public partial class SettingsForm : Form
     {
-        public Settings Settings { get; private set; } = null;
+        public Settings ProgramSettings { get; private set; } = null;
 
         public SettingsForm(Settings settings)
         {
             InitializeComponent();
-            this.Settings = settings;
+            this.ProgramSettings = settings;
             this.maxGoodPingNumericUpDown.Value = settings.MaximumGoodPing;
             this.secondsToTimeoutNumericUpDown.Value = settings.SecondsUntilIPTimeout;
             this.chooseBadPingColorButton.BackColor = settings.BadPingColor;
@@ -20,36 +20,41 @@ namespace DbD_Pingz
 
         private void ChooseGoodPingColorButton_Click(object sender, EventArgs e)
         {
-            colorDialog1.Color = Settings.GoodPingColor;
+            colorDialog1.Color = ProgramSettings.GoodPingColor;
             colorDialog1.ShowDialog();
-            Settings.SetGoodPingColor(colorDialog1.Color);
-            this.chooseGoodPingColorButton.BackColor = Settings.GoodPingColor;
+            ProgramSettings.SetGoodPingColor(colorDialog1.Color);
+            this.chooseGoodPingColorButton.BackColor = ProgramSettings.GoodPingColor;
         }
 
         private void ChooseBadPingColorButton_Click(object sender, EventArgs e)
         {
-            colorDialog1.Color = Settings.BadPingColor;
+            colorDialog1.Color = ProgramSettings.BadPingColor;
             colorDialog1.ShowDialog();
-            Settings.SetBadPingColor(colorDialog1.Color);
-            this.chooseBadPingColorButton.BackColor = Settings.BadPingColor;
+            ProgramSettings.SetBadPingColor(colorDialog1.Color);
+            this.chooseBadPingColorButton.BackColor = ProgramSettings.BadPingColor;
         }
 
         private void MaximumGoodPingNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
             NumericUpDown num = (NumericUpDown)sender;
-            Settings.MaximumGoodPing = Convert.ToInt32(num.Value);
+            ProgramSettings.MaximumGoodPing = (Convert.ToInt32(num.Value));
         }
 
         private void SecondsToTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
             NumericUpDown num = (NumericUpDown)sender;
-            Settings.SecondsUntilIPTimeout = Convert.ToInt32(num.Value);
+            ProgramSettings.SecondsUntilIPTimeout = (Convert.ToInt32(num.Value));
         }
 
         private void timeoutedIpRemoveNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
             NumericUpDown num = (NumericUpDown)sender;
-            Settings.SecondsUntilTimeoutedIpRemoved = Convert.ToInt32(num.Value);
+            ProgramSettings.SecondsUntilTimeoutedIpRemoved = (Convert.ToInt32(num.Value));
+        }
+
+        private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Settings.WriteSettingsToXML(DbDPingz.saveXMLFileName, ProgramSettings);
         }
     }
 }

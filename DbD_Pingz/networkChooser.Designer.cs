@@ -74,7 +74,7 @@
             // rememberDecisionCheckbox
             // 
             this.rememberDecisionCheckbox.AutoSize = true;
-            this.rememberDecisionCheckbox.Location = new System.Drawing.Point(12, 54);
+            this.rememberDecisionCheckbox.Location = new System.Drawing.Point(15, 58);
             this.rememberDecisionCheckbox.Name = "rememberDecisionCheckbox";
             this.rememberDecisionCheckbox.Size = new System.Drawing.Size(119, 17);
             this.rememberDecisionCheckbox.TabIndex = 5;
@@ -94,7 +94,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(1000, 125);
-            this.MinimumSize = new System.Drawing.Size(170, 125);
+            this.MinimumSize = new System.Drawing.Size(250, 125);
             this.Name = "NetworkChooser";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "DbD Pingz";

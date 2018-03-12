@@ -5,8 +5,10 @@ namespace DbD_Pingz
 {
     class DbDPingz
     {
-        public const string version = "1.2.*";
-        public const string buildtype = "RELEASE";
+        public const string version = "1.2";
+        public const string buildtype = "BETA";
+        public const string saveXMLFileName = "DbD_PingTestSave.xml";
+
         [STAThread]
         static void Main(string[] args)
         {
