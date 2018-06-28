@@ -40,6 +40,10 @@
             this.secondsToTimeoutNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.timeoutedIpRemoveNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.chartPaletteSelect = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.useAveragePingCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.maxGoodPingNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.secondsToTimeoutNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutedIpRemoveNumericUpDown)).BeginInit();
@@ -53,6 +57,7 @@
             this.label2.Size = new System.Drawing.Size(103, 16);
             this.label2.TabIndex = 0;
             this.label2.Text = "Max. good ping:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // maxGoodPingNumericUpDown
             // 
@@ -85,6 +90,7 @@
             this.label3.Size = new System.Drawing.Size(107, 16);
             this.label3.TabIndex = 0;
             this.label3.Text = "Good ping color:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // chooseGoodPingColorButton
             // 
@@ -112,6 +118,7 @@
             this.label4.Size = new System.Drawing.Size(98, 16);
             this.label4.TabIndex = 0;
             this.label4.Text = "Bad ping color:";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // colorDialog1
             // 
@@ -126,6 +133,7 @@
             this.label1.Size = new System.Drawing.Size(138, 20);
             this.label1.TabIndex = 0;
             this.label1.Text = "Seconds until timeout:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // secondsToTimeoutNumericUpDown
             // 
@@ -153,6 +161,7 @@
             this.label5.Size = new System.Drawing.Size(216, 20);
             this.label5.TabIndex = 0;
             this.label5.Text = "Seconds until timeouted ip remove:";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // timeoutedIpRemoveNumericUpDown
             // 
@@ -172,10 +181,68 @@
             0});
             this.timeoutedIpRemoveNumericUpDown.ValueChanged += new System.EventHandler(this.timeoutedIpRemoveNumericUpDown_ValueChanged);
             // 
+            // chartPaletteSelect
+            // 
+            this.chartPaletteSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.chartPaletteSelect.FormattingEnabled = true;
+            this.chartPaletteSelect.Items.AddRange(new object[] {
+            "None",
+            "Bright",
+            "Grayscale",
+            "Excel",
+            "Light",
+            "Pastel",
+            "EarthTones",
+            "SemiTransparent",
+            "Berry",
+            "Chocolate",
+            "Fire",
+            "SeaGreen",
+            "BrightPastel"});
+            this.chartPaletteSelect.Location = new System.Drawing.Point(192, 165);
+            this.chartPaletteSelect.Name = "chartPaletteSelect";
+            this.chartPaletteSelect.Size = new System.Drawing.Size(120, 21);
+            this.chartPaletteSelect.TabIndex = 6;
+            this.chartPaletteSelect.SelectedIndexChanged += new System.EventHandler(this.chartPaletteSelect_SelectedIndexChanged);
+            // 
+            // label6
+            // 
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(12, 165);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(174, 20);
+            this.label6.TabIndex = 7;
+            this.label6.Text = "Ping info chart color palette:";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label7
+            // 
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(66, 189);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(120, 20);
+            this.label7.TabIndex = 8;
+            this.label7.Text = "Use average ping:";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // useAveragePingCheckBox
+            // 
+            this.useAveragePingCheckBox.AutoSize = true;
+            this.useAveragePingCheckBox.Location = new System.Drawing.Point(192, 192);
+            this.useAveragePingCheckBox.Name = "useAveragePingCheckBox";
+            this.useAveragePingCheckBox.Size = new System.Drawing.Size(15, 14);
+            this.useAveragePingCheckBox.TabIndex = 9;
+            this.useAveragePingCheckBox.UseVisualStyleBackColor = true;
+            this.useAveragePingCheckBox.CheckedChanged += new System.EventHandler(this.useAveragePingCheckBox_CheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(320, 167);
+            this.ClientSize = new System.Drawing.Size(320, 211);
+            this.Controls.Add(this.useAveragePingCheckBox);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.chartPaletteSelect);
             this.Controls.Add(this.timeoutedIpRemoveNumericUpDown);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.secondsToTimeoutNumericUpDown);
@@ -196,6 +263,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.secondsToTimeoutNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutedIpRemoveNumericUpDown)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -211,5 +279,9 @@
         private System.Windows.Forms.NumericUpDown secondsToTimeoutNumericUpDown;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown timeoutedIpRemoveNumericUpDown;
+        private System.Windows.Forms.ComboBox chartPaletteSelect;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.CheckBox useAveragePingCheckBox;
     }
 }

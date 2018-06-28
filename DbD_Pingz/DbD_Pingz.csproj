@@ -32,6 +32,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <PlatformTarget>x64</PlatformTarget>
     <OutputPath>..\bin\x64\Debug\</OutputPath>
+    <Optimize>true</Optimize>
+    <WarningLevel>0</WarningLevel>
+    <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <PlatformTarget>x64</PlatformTarget>
@@ -90,6 +93,7 @@
     <Compile Include="NetworkChooser.Designer.cs">
       <DependentUpon>NetworkChooser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ping.cs" />
     <Compile Include="PingInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -904,6 +908,7 @@
     <Content Include="flags\zw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="icons\icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

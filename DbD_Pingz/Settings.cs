@@ -3,6 +3,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.ComponentModel;
 using System;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace DbD_Pingz
 {
@@ -19,6 +20,8 @@ namespace DbD_Pingz
         private Size _PingInfoFormSize;
         private int _SecondsUntilTimeoutedIpRemoved;
         private string _LastNetworkAdapterName;
+        private string _PingInfoChartPaletteString;
+        private bool _UseAveragePing;
 
 
         [XmlElement("MaximumGoodPing")]
@@ -32,9 +35,23 @@ namespace DbD_Pingz
             }
         }
         [XmlIgnore]
-        public Color GoodPingColor { get { return ColorTranslator.FromHtml(GoodPingColorHtml); } private set { } }
+        public Color GoodPingColor
+        {
+            get { return ColorTranslator.FromHtml(GoodPingColorHtml); }
+            set
+            {
+                GoodPingColorHtml = ColorTranslator.ToHtml(value);
+            }
+        }
         [XmlIgnore]
-        public Color BadPingColor { get { return ColorTranslator.FromHtml(BadPingColorHtml); } private set { } }
+        public Color BadPingColor
+        {
+            get { return ColorTranslator.FromHtml(BadPingColorHtml); }
+            set
+            {
+                BadPingColorHtml = ColorTranslator.ToHtml(value);
+            }
+        }
         [XmlElement("BoodPingColorHtml")]
         public string GoodPingColorHtml
         {
@@ -145,14 +162,48 @@ namespace DbD_Pingz
                 fireSettingsChangedEvent("LastNetworkAdapterName");
             }
         }
+        [XmlIgnore]
+        public ChartColorPalette PingInfoChartPalette
+        {
+            get
+            {
+                return (ChartColorPalette)Enum.Parse(typeof(ChartColorPalette), PingInfoChartPaletteString);
+            }
+            set
+            {
+                PingInfoChartPaletteString = value.ToString();
+            }
+        }
+
+        [XmlElement("PingInfoChartPaletteString")]
+        public string PingInfoChartPaletteString
+        {
+            get { return _PingInfoChartPaletteString; }
+            set
+            {
+                _PingInfoChartPaletteString = value;
+                fireSettingsChangedEvent("PingInfoChartPaletteString");
+            }
+        }
+
+        [XmlElement("UseAveragePing")]
+        public bool UseAveragePing
+        {
+            get { return _UseAveragePing; }
+            set
+            {
+                _UseAveragePing = value;
+                fireSettingsChangedEvent("UseAveragePing");
+            }
+        }
 
         public event PropertyChangedEventHandler onSettingsChanged;
 
         public Settings()
         {
             MaximumGoodPing = 90;
-            SetBadPingColor(Color.Red);
-            SetGoodPingColor(Color.LightGreen);
+            BadPingColor = Color.Red;
+            GoodPingColor = Color.LightGreen;
             SecondsUntilIPTimeout = 5;
             MainWindowSplitter1Distance = 140;
             MainWindowSplitter2Distance = 280;
@@ -161,20 +212,9 @@ namespace DbD_Pingz
             PingInfoFormSize = new Size(830, 570);
             SecondsUntilTimeoutedIpRemoved = 3;
             LastNetworkAdapterName = null;
-        }
+            PingInfoChartPalette = ChartColorPalette.BrightPastel;
+            UseAveragePing = false;
 
-        public void SetGoodPingColor(Color color)
-        {
-            GoodPingColorHtml = ColorTranslator.ToHtml(color);
-            GoodPingColor = color;
-            fireSettingsChangedEvent("GoodPingColor");
-        }
-
-        public void SetBadPingColor(Color color)
-        {
-            BadPingColorHtml = ColorTranslator.ToHtml(color);
-            BadPingColor = color;
-            fireSettingsChangedEvent("BadPingColor");
         }
 
         private void fireSettingsChangedEvent(string propertyName)

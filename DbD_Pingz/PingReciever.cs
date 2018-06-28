@@ -10,22 +10,6 @@ namespace DbD_Pingz
 {
     public delegate void CalculatedPingEventHandler(object sender, Ping ping);
 
-    public class Ping
-    {
-        public IpV4Address Ip { get; }
-        public TimeSpan TimeElapsed { get; }
-        public DateTime SentPacketTime { get; }
-        public DateTime RecievedPacketTime { get; }
-
-        public Ping(IpV4Address ip, DateTime sentPacketTime, DateTime recievedPacketTime)
-        {
-            this.Ip = ip;
-            this.TimeElapsed = recievedPacketTime - sentPacketTime;
-            this.SentPacketTime = sentPacketTime;
-            this.RecievedPacketTime = recievedPacketTime;
-        }
-    }
-
     public class PingReciever : IDisposable
     {
         public event CalculatedPingEventHandler CalculatedPingEvent;

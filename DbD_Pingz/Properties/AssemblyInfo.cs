@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DbD_Pingz")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration(DbD_Pingz.DbDPingz.buildtype)]
+[assembly: AssemblyDescription("Tool to get your ping in Dead By Daylight™.")]
+[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("besentv.xyz")]
 [assembly: AssemblyProduct("DbD_Pingz")]
 [assembly: AssemblyCopyright("Release under EUPL software licence")]

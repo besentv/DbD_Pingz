@@ -9,17 +9,19 @@ namespace DbD_Pingz
     {
         private static readonly Dictionary<string, string> EnglishCountryNameByIso2 = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-           //images for non-ISO 3166-1 flags: an, catalonia, cs, en, eu, scotland, wales are not used
+          
 
-//            {"AQ", "Antarctica"},
-//            {"BQ", "Bonaire, Sint Eustatius and Saba"},
-//            {"CW", "Curaçao"},
-//            {"IM", "Isle of Man"},
-//            {"JE", "Jersey"},
-//            {"BL", "Saint Barthélemy"},
-//            {"MF", "Saint Martin (French part)"},
-//            {"SX", "Sint Maarten (Dutch part)"},
-//            {"SS", "South Sudan"},
+            {"AQ", "Antarctica"},
+            {"BQ", "Bonaire, Sint Eustatius and Saba"},
+            {"CW", "Curaçao"},
+            {"IM", "Isle of Man"},
+            {"JE", "Jersey"},
+            {"BL", "Saint Barthélemy"},
+            {"MF", "Saint Martin (French part)"},
+            {"SX", "Sint Maarten (Dutch part)"},
+            {"SS", "South Sudan"},
+
+            //all other flags
 
             {"AF", "Afghanistan"},
             {"AX", "Åland Islands"},
@@ -267,6 +269,7 @@ namespace DbD_Pingz
 
         public static Image ConvertCountryIdToFlagImage(string countryIdIso2)
         {
+            //non-ISO 3166-1 flags: an, catalonia, cs, en, eu, scotland, wales arent used
             if (countryIdIso2 == null)
                 return null;
 

@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PingInfo));
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PingInfo));
             this.pingInfoList = new System.Windows.Forms.DataGridView();
             this.ipColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PingColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -43,6 +43,7 @@
             this.makeDbDPingzTopmostToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeNetworkAdapterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reportBugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pingInfoChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -60,6 +61,7 @@
             this.previousPingInfoContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.whoisThisIPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetTableToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.killToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pingInfoList)).BeginInit();
             this.ipRightKlickMenu.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -153,6 +155,7 @@
             this.makeDbDPingzTopmostToolStripMenuItem,
             this.settingsToolStripMenuItem,
             this.changeNetworkAdapterToolStripMenuItem,
+            this.reportBugToolStripMenuItem,
             this.aboutToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.programToolStripMenuItem.Name = "programToolStripMenuItem";
@@ -163,35 +166,43 @@
             // 
             this.makeDbDPingzTopmostToolStripMenuItem.CheckOnClick = true;
             this.makeDbDPingzTopmostToolStripMenuItem.Name = "makeDbDPingzTopmostToolStripMenuItem";
-            this.makeDbDPingzTopmostToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.makeDbDPingzTopmostToolStripMenuItem.Size = new System.Drawing.Size(274, 22);
             this.makeDbDPingzTopmostToolStripMenuItem.Text = "DbD Pingz Is Topmost";
             this.makeDbDPingzTopmostToolStripMenuItem.Click += new System.EventHandler(this.MakeDbDPingzTopmostToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(274, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItem_Click);
             // 
             // changeNetworkAdapterToolStripMenuItem
             // 
             this.changeNetworkAdapterToolStripMenuItem.Name = "changeNetworkAdapterToolStripMenuItem";
-            this.changeNetworkAdapterToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.changeNetworkAdapterToolStripMenuItem.Size = new System.Drawing.Size(274, 22);
             this.changeNetworkAdapterToolStripMenuItem.Text = "Change Network Adapter";
             this.changeNetworkAdapterToolStripMenuItem.Click += new System.EventHandler(this.ChangeNetworkAdapterToolStripMenuItem_Click);
+            // 
+            // reportBugToolStripMenuItem
+            // 
+            this.reportBugToolStripMenuItem.Name = "reportBugToolStripMenuItem";
+            this.reportBugToolStripMenuItem.Size = new System.Drawing.Size(274, 22);
+            this.reportBugToolStripMenuItem.Text = "Report An Issue On GitHub";
+            this.reportBugToolStripMenuItem.Click += new System.EventHandler(this.reportBugToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(274, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
+            this.exitToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("exitToolStripMenuItem.Image")));
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(274, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -372,22 +383,29 @@
             // 
             this.previousPingInfoContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.whoisThisIPToolStripMenuItem,
-            this.resetTableToolStripMenuItem1});
+            this.resetTableToolStripMenuItem1,
+            this.killToolStripMenuItem});
             this.previousPingInfoContextMenu.Name = "previousPingInfoContextMenu";
-            this.previousPingInfoContextMenu.Size = new System.Drawing.Size(179, 48);
+            this.previousPingInfoContextMenu.Size = new System.Drawing.Size(315, 70);
             this.previousPingInfoContextMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.PreviousPingInfoContextMenu_ItemClicked);
             // 
             // whoisThisIPToolStripMenuItem
             // 
             this.whoisThisIPToolStripMenuItem.Name = "whoisThisIPToolStripMenuItem";
-            this.whoisThisIPToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.whoisThisIPToolStripMenuItem.Size = new System.Drawing.Size(314, 22);
             this.whoisThisIPToolStripMenuItem.Text = "Whois this IP";
             // 
             // resetTableToolStripMenuItem1
             // 
             this.resetTableToolStripMenuItem1.Name = "resetTableToolStripMenuItem1";
-            this.resetTableToolStripMenuItem1.Size = new System.Drawing.Size(178, 22);
+            this.resetTableToolStripMenuItem1.Size = new System.Drawing.Size(314, 22);
             this.resetTableToolStripMenuItem1.Text = "Reset Table";
+            // 
+            // killToolStripMenuItem
+            // 
+            this.killToolStripMenuItem.Name = "killToolStripMenuItem";
+            this.killToolStripMenuItem.Size = new System.Drawing.Size(314, 22);
+            this.killToolStripMenuItem.Text = ":( (Needs elevated privileges)";
             // 
             // PingInfo
             // 
@@ -456,5 +474,7 @@
         private System.Windows.Forms.DataGridViewImageColumn Country;
         private System.Windows.Forms.DataGridViewCheckBoxColumn IsValveISP;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem killToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem reportBugToolStripMenuItem;
     }
 }

@@ -1,40 +1,70 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace DbD_Pingz
 {
     class DbDPingz
     {
-        public const string version = "1.2";
-        public const string buildtype = "BETA";
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
+
+        public static bool ConsoleAllocated = false;
+
+        public const string version = "1.3";
+        public static string buildtype = "";
         public const string saveXMLFileName = "DbD_PingTestSave.xml";
+
+        public static bool isDebug = false;
+
+        public static void ShowConsole()
+        {
+            if (!ConsoleAllocated)
+            {
+                AllocConsole();
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                ConsoleAllocated = true;
+                Console.WriteLine("DbD_Pingz started with console. DEBUG?: " + isDebug);
+            }
+        }
+
+        [Conditional("DEBUG")]
+        public static void isDebugging()
+        {
+            isDebug = true;
+        }
 
         [STAThread]
         static void Main(string[] args)
         {
-            //if (args.Length == 0)
-            //{
-            //    TextWriter consoleWriter = Console.Out;
-            //    FileStream logOstream = new FileStream("log.txt", FileMode.OpenOrCreate, FileAccess.Write);
-            //    logOstream.SetLength(0);
-            //    StreamWriter logfileWriter = new StreamWriter(logOstream);
-            //    logfileWriter.AutoFlush = true;
-            //    Console.SetOut(logfileWriter);
-            //    Console.SetError(logfileWriter);
-            //    Application.EnableVisualStyles();
-            //    Application.SetCompatibleTextRenderingDefault(false);
-            //    Application.Run(new PingInfo(args));
-            //    Console.SetOut(consoleWriter);
-            //    Console.SetError(consoleWriter);
-            //    logOstream.Close();
-            //    logfileWriter.Close();
-            //}
-            //else     
+
+            isDebugging();
+
+            if (args.Length > 0)
             {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new PingInfo(args));
+                if (args[0].Contains("console"))
+                {
+                    ShowConsole();                                                                  //Use console if desired by argument "-console"
+                }
             }
+
+            if (isDebug)
+            {
+                ShowConsole(); //Use console if build has DEBUG constant
+                buildtype = "BETA";
+            }
+
+            else if (!isDebug)
+            {
+                buildtype = "RELEASE";
+            }
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new PingInfo(args));
+
         }
     }
 }
