@@ -1,19 +1,20 @@
-﻿using System;
+﻿using PcapDotNet.Core;
+using PcapDotNet.Packets;
+using PcapDotNet.Packets.IpV4;
+using PcapDotNet.Packets.Transport;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using PcapDotNet.Core;
-using PcapDotNet.Packets;
-using PcapDotNet.Packets.Transport;
-using PcapDotNet.Packets.IpV4;
 
 namespace DbD_Pingz
 {
     public delegate void CalculatedPingEventHandler(object sender, Ping ping);
+    public delegate void DismissedPacketHandler(object sender, DismissedPacketEventStats dismissedPacketEventStats);
 
     public struct StunInfo //This struct is used to keep track of STUN packet data.
     {
-        public DateTime sendTime;
-        public DataSegment transactionID;
+        public DateTime sendTime { get; }
+        public DataSegment transactionID { get; }
 
         public StunInfo(DateTime sendTime, DataSegment transactionID)
         {
@@ -22,9 +23,20 @@ namespace DbD_Pingz
         }
     }
 
+    public struct DismissedPacketEventStats
+    {
+        public IpV4Address address;
+
+        public DismissedPacketEventStats(IpV4Address ipV4Address)
+        {
+            address = ipV4Address;
+        }
+    }
+
     public class PingReciever : IDisposable
     {
         public event CalculatedPingEventHandler CalculatedPingEvent;
+        public event DismissedPacketHandler DismissedPacketEvent;
         public bool IsRunning { get; private set; } = false;
 
         private bool disposed = false;
@@ -142,6 +154,7 @@ namespace DbD_Pingz
                     {
                         waitingForResponse.Remove(ip.Destination);
                         waitingForResponse.Add(ip.Destination, stunInfo);
+                        DismissedPacketEvent(this, new DismissedPacketEventStats(ip.Destination));
                     }
                 }
             }

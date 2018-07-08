@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using PcapDotNet.Core;
 using PcapDotNet.Packets.IpV4;
-using System.Runtime.InteropServices;
 using System.Reflection;
 
 namespace DbD_Pingz
@@ -26,6 +25,7 @@ namespace DbD_Pingz
         private PingReciever pingReciever = new PingReciever();
         private delegate void accessPingInfoControlsSafely(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime);
         private ConcurrentDictionary<IpV4Address, Ping> pingList = new ConcurrentDictionary<IpV4Address, Ping>();
+        private ConcurrentDictionary<IpV4Address, PacketStats> packetStatsList = new ConcurrentDictionary<IpV4Address, PacketStats>();
         private Dictionary<String, IpWhois> ipWhoisList = new Dictionary<String, IpWhois>();
         private List<accessPingInfoControlsSafely> pingInformationSubscriberList = new List<accessPingInfoControlsSafely>();
         private ConcurrentDictionary<IpV4Address, List<TimeSpan>> pingHistory = new ConcurrentDictionary<IpV4Address, List<TimeSpan>>();
@@ -49,6 +49,7 @@ namespace DbD_Pingz
             pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.PreviousPingInfoList_SetPings));
 
             pingReciever.CalculatedPingEvent += new CalculatedPingEventHandler(this.GetPings);
+            pingReciever.DismissedPacketEvent += new DismissedPacketHandler(this.GetDismissedPacket);
             pingInfoChart.MouseWheel += new MouseEventHandler(PingInfoChart_MouseWheel);
             //pingInfoChart.ChartAreas[0].AxisY.StripLines.Add(maxGoodPingLine);
             pingInfoChart.ChartAreas[0].Position = new ElementPosition(0, 0, 100, 100); //Less whitespace around the chart
@@ -140,8 +141,36 @@ namespace DbD_Pingz
         }
 
         #region Ping Info Controls Management
+
+        public void GetDismissedPacket(object sender, DismissedPacketEventStats dismissedPacketEventStats)
+        {
+            if (packetStatsList.ContainsKey(dismissedPacketEventStats.address))
+            {
+                packetStatsList[dismissedPacketEventStats.address].Dismissed++;
+                packetStatsList[dismissedPacketEventStats.address].Total++;
+            }
+            else
+            {
+                PacketStats stats = new PacketStats();
+                stats.Dismissed++;
+                stats.Total++;
+                packetStatsList.TryAdd(dismissedPacketEventStats.address, new PacketStats());
+            }
+        }
+
         public void GetPings(object sender, Ping ping)
         {
+            if (packetStatsList.ContainsKey(ping.Ip))
+            {
+                packetStatsList[ping.Ip].Total++;
+            }
+            else
+            {
+                PacketStats stats = new PacketStats();
+                stats.Dismissed++;
+                stats.Total++;
+                packetStatsList.TryAdd(ping.Ip, new PacketStats());
+            }
             this.FillPingList(ping);
         }
 
@@ -203,7 +232,7 @@ namespace DbD_Pingz
                     //validateList[address].TimeElapsed = new TimeSpan(Convert.ToInt64(avgTicks));
                     TimeSpan avgTime = new TimeSpan(Convert.ToInt64(avgTicks));
                     int diff = avgTime.Milliseconds - validateList[address].TimeElapsed.Milliseconds;
-                    Console.WriteLine("Average ping time from " + pingHistory[address].Count + " list entries calculated: " + avgTime.Milliseconds + "ms -> Difference: " + diff);
+                    //Console.WriteLine("Average ping time from " + pingHistory[address].Count + " list entries calculated: " + avgTime.Milliseconds + "ms -> Difference: " + diff);
 
                     validateList[address] = new Ping(validateList[address], avgTime);
                 }
@@ -233,6 +262,7 @@ namespace DbD_Pingz
                             {
                                 Console.WriteLine("Ip:" + ip.ToString() + " was removed from pinglist!");
                             }
+                        packetStatsList.TryRemove(ip, out PacketStats ignored2);
                         }
                     }
                 }
@@ -353,6 +383,9 @@ namespace DbD_Pingz
                                         row.Cells[0].Style.BackColor = chartColor;
                                     }
                                     row.Cells[1].Value = pingList[ip].TimeElapsed.Milliseconds + "ms";
+                                    PacketStats stats;
+                                    if(packetStatsList.TryGetValue(ip,out stats))
+                                        row.Cells[2].Value = stats.Dismissed + "/" + stats.Total + " -> " + String.Format("{0:P2}", stats.PacketLoss) + "";
                                     if (pingList[ip].TimeElapsed.Milliseconds > settings.MaximumGoodPing)
                                         row.Cells[1].Style.BackColor = settings.BadPingColor;
                                     else row.Cells[1].Style.BackColor = settings.GoodPingColor;
@@ -363,7 +396,7 @@ namespace DbD_Pingz
                         if (!containsKey && !timedOut)
                         {
                             int rowNumber;
-                            rowNumber = pingInfoList.Rows.Add(new object[] { ip.ToString(), pingList[ip].TimeElapsed.Milliseconds + "ms" });
+                            rowNumber = pingInfoList.Rows.Add(new object[] { ip.ToString(), pingList[ip].TimeElapsed.Milliseconds + "ms",  "?/? -> ?%" });
                             if (GetPingInfoChartSeriesColor(ip, out Color chartColor))
                             {
                                 pingInfoList.Rows[rowNumber].Cells[0].Style.BackColor = chartColor;
@@ -373,6 +406,10 @@ namespace DbD_Pingz
                                 pingInfoList.Rows[rowNumber].Cells[1].Style.BackColor = settings.BadPingColor;
                             else
                                 pingInfoList.Rows[rowNumber].Cells[1].Style.BackColor = settings.GoodPingColor;
+
+                            PacketStats stats;
+                            if (packetStatsList.TryGetValue(ip, out stats))
+                                pingInfoList.Rows[rowNumber].Cells[2].Value = stats.Dismissed + "/" + stats.Total + " -> " + String.Format("{0:P2}", stats.PacketLoss) + "";
                         }
                     }
                     foreach (DataGridViewRow deleteRow in rowsToDelete)

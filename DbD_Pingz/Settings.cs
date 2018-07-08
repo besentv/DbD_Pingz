@@ -204,7 +204,7 @@ namespace DbD_Pingz
             MaximumGoodPing = 90;
             BadPingColor = Color.Red;
             GoodPingColor = Color.LightGreen;
-            SecondsUntilIPTimeout = 5;
+            SecondsUntilIPTimeout = 3;
             MainWindowSplitter1Distance = 140;
             MainWindowSplitter2Distance = 280;
             DbDPingzIsTopmost = false;

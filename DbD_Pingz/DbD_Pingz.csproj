@@ -93,6 +93,7 @@
     <Compile Include="NetworkChooser.Designer.cs">
       <DependentUpon>NetworkChooser.cs</DependentUpon>
     </Compile>
+    <Compile Include="PacketStats.cs" />
     <Compile Include="Ping.cs" />
     <Compile Include="PingInfo.cs">
       <SubType>Form</SubType>
