@@ -33,6 +33,9 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.pingInfoList = new System.Windows.Forms.DataGridView();
+            this.ipColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PingColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DataLoss = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ipRightKlickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.whoisIp = new System.Windows.Forms.ToolStripMenuItem();
             this.resetTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,9 +64,6 @@
             this.resetTableToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.killToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
-            this.ipColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PingColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DataLoss = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.pingInfoList)).BeginInit();
             this.ipRightKlickMenu.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -104,6 +104,30 @@
             this.pingInfoList.TabStop = false;
             this.pingInfoList.SelectionChanged += new System.EventHandler(this.PingInfoList_SelectionChanged);
             this.pingInfoList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.List_MouseClick);
+            // 
+            // ipColumn
+            // 
+            this.ipColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ipColumn.HeaderText = "IP";
+            this.ipColumn.Name = "ipColumn";
+            this.ipColumn.ReadOnly = true;
+            this.ipColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // PingColumn
+            // 
+            this.PingColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.PingColumn.HeaderText = "Ping";
+            this.PingColumn.Name = "PingColumn";
+            this.PingColumn.ReadOnly = true;
+            this.PingColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // DataLoss
+            // 
+            this.DataLoss.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.DataLoss.HeaderText = "PacketsLost (Experimental)";
+            this.DataLoss.Name = "DataLoss";
+            this.DataLoss.ReadOnly = true;
+            this.DataLoss.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // ipRightKlickMenu
             // 
@@ -173,6 +197,7 @@
             // 
             // reportBugToolStripMenuItem
             // 
+            this.reportBugToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("reportBugToolStripMenuItem.Image")));
             this.reportBugToolStripMenuItem.Name = "reportBugToolStripMenuItem";
             this.reportBugToolStripMenuItem.Size = new System.Drawing.Size(274, 22);
             this.reportBugToolStripMenuItem.Text = "Report An Issue On GitHub";
@@ -397,30 +422,6 @@
             // printDialog1
             // 
             this.printDialog1.UseEXDialog = true;
-            // 
-            // ipColumn
-            // 
-            this.ipColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ipColumn.HeaderText = "IP";
-            this.ipColumn.Name = "ipColumn";
-            this.ipColumn.ReadOnly = true;
-            this.ipColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // PingColumn
-            // 
-            this.PingColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.PingColumn.HeaderText = "Ping";
-            this.PingColumn.Name = "PingColumn";
-            this.PingColumn.ReadOnly = true;
-            this.PingColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // DataLoss
-            // 
-            this.DataLoss.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.DataLoss.HeaderText = "PacketsLost (Experimental)";
-            this.DataLoss.Name = "DataLoss";
-            this.DataLoss.ReadOnly = true;
-            this.DataLoss.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // PingInfo
             // 

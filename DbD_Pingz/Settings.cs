@@ -225,13 +225,25 @@ namespace DbD_Pingz
             }
         }
 
-        public static void WriteSettingsToXML(string uri, Settings settings)
-        {
-            Console.WriteLine("Writing settings to file.");
+        public static string WriteSettingsToXML(string uri, Settings settings)
+        {        
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(Settings));
-            using (TextWriter writer = new StreamWriter(uri))
+
+            try
             {
-                xmlSerializer.Serialize(writer, settings);
+                using (TextWriter writer = new StreamWriter(uri))
+                {
+                    xmlSerializer.Serialize(writer, settings);
+                }
+                Console.WriteLine("Wrote settings to file.");
+                return null;
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                Console.WriteLine("Could not write settings to file! Probably write protected.");
+                return ex.ToString();
             }
         }
         public static Settings LoadSettingsFromXML(string uri)
@@ -248,7 +260,7 @@ namespace DbD_Pingz
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.StackTrace);
+                        Console.WriteLine(ex.ToString());
                         return null;
                     }
                 }

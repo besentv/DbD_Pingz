@@ -281,7 +281,7 @@ namespace DbD_Pingz
             }
             catch (FileNotFoundException ex)
             {
-                Console.WriteLine(ex.StackTrace);
+                Console.WriteLine(ex.ToString());
                 return null;
             }
             return countryFlag;

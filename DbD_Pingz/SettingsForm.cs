@@ -56,7 +56,12 @@ namespace DbD_Pingz
 
         private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Settings.WriteSettingsToXML(DbDPingz.saveXMLFileName, ProgramSettings);
+            string ret = Settings.WriteSettingsToXML(DbDPingz.saveXMLFileName, ProgramSettings);
+
+            if(ret != null)
+            {
+                MessageBox.Show(ret, "CAN NOT WRITE SETTINGS!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void chartPaletteSelect_SelectedIndexChanged(object sender, EventArgs e)
