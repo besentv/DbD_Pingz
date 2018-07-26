@@ -316,7 +316,10 @@ namespace DbD_Pingz
                                 {
                                     row.Cells[2].Value = ipWhoisList[rowIpString].CountryFlag;
                                     row.Cells[2].ToolTipText = ipWhoisList[rowIpString].CountryName;
-                                    row.Height = ipWhoisList[rowIpString].CountryFlag.Height;
+                                    if (row.Height < ipWhoisList[rowIpString].CountryFlag.Height)
+                                    {
+                                        row.Height = ipWhoisList[rowIpString].CountryFlag.Height;
+                                    }
                                 }
                                 if (ipWhoisList[rowIpString].ipWhoisInfo.Org.ToLower().Contains("valve"))
                                 {
