@@ -14,11 +14,8 @@ namespace DbD_Pingz
 {
     public partial class PingInfo : Form
     {
-
-
         private DataGridView.HitTestInfo lastHitItem;
         private StripLine maxGoodPingLine = new StripLine();
-
 
         private Settings settings;
 
@@ -42,6 +39,8 @@ namespace DbD_Pingz
             //maxGoodPingLine.Interval = 0;
             //maxGoodPingLine.StripWidth = 1;
             previousPingInfoList.Columns[2].DefaultCellStyle.NullValue = null;
+            previousPingInfoList.Columns[2].ValueType = typeof(DateTime);
+            previousPingInfoList.MouseWheel += new MouseEventHandler(PreviousPingInfoList_MouseWheel);
             //maxGoodPingLine.Text = "Max. Good Ping";
 
             pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.PingInfoChart_SetPings)); //Chart first to get the line colors!
@@ -177,7 +176,7 @@ namespace DbD_Pingz
         private void CallPingInfoSubscribers(object sender, EventArgs e)
         {
             ConcurrentDictionary<IpV4Address, Ping> pingListCopy = pingList;
-            CalculateAveragePing(pingListCopy);   
+            CalculateAveragePing(pingListCopy);
             foreach (accessPingInfoControlsSafely subscriber in pingInformationSubscriberList)
             {
                 this.Invoke(subscriber, new object[] { pingListCopy, DateTime.Now });
@@ -250,23 +249,23 @@ namespace DbD_Pingz
 
         private void ValidatePingList(ConcurrentDictionary<IpV4Address, Ping> validateList)
         {
-                foreach (IpV4Address ip in validateList.Keys)
+            foreach (IpV4Address ip in validateList.Keys)
+            {
+                TimeSpan timeSinceLastRecievedPackage = DateTime.Now - validateList[ip].RecievedPacketTime;
+                if (timeSinceLastRecievedPackage.Seconds >= settings.SecondsUntilIPTimeout)
                 {
-                    TimeSpan timeSinceLastRecievedPackage = DateTime.Now - validateList[ip].RecievedPacketTime;
-                    if (timeSinceLastRecievedPackage.Seconds >= settings.SecondsUntilIPTimeout)
+                    Console.WriteLine("Ip:" + ip.ToString() + " timed out! Will be removed in:" + ((settings.SecondsUntilIPTimeout + settings.SecondsUntilTimeoutedIpRemoved) - timeSinceLastRecievedPackage.Seconds) + "seconds.");
+                    if (timeSinceLastRecievedPackage.Seconds >= (settings.SecondsUntilIPTimeout + settings.SecondsUntilTimeoutedIpRemoved))
                     {
-                        Console.WriteLine("Ip:" + ip.ToString() + " timed out! Will be removed in:" + ((settings.SecondsUntilIPTimeout + settings.SecondsUntilTimeoutedIpRemoved) - timeSinceLastRecievedPackage.Seconds) + "seconds.");
-                        if (timeSinceLastRecievedPackage.Seconds >= (settings.SecondsUntilIPTimeout + settings.SecondsUntilTimeoutedIpRemoved))
+                        if (validateList.TryRemove(ip, out Ping ignored))
                         {
-                            if (validateList.TryRemove(ip, out Ping ignored))
-                            {
-                                Console.WriteLine("Ip:" + ip.ToString() + " was removed from pinglist!");
-                            }
-                        packetStatsList.TryRemove(ip, out PacketStats ignored2);
+                            Console.WriteLine("Ip:" + ip.ToString() + " was removed from pinglist!");
                         }
+                        packetStatsList.TryRemove(ip, out PacketStats ignored2);
                     }
                 }
-            
+            }
+
             //else
             //{
             //    foreach (IpV4Address ip in validateList.Keys)
@@ -285,7 +284,7 @@ namespace DbD_Pingz
             //        }
             //    }
             //}
-           
+
         }
 
         private void PreviousPingInfoList_SetPings(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime)
@@ -317,6 +316,7 @@ namespace DbD_Pingz
                                 {
                                     row.Cells[2].Value = ipWhoisList[rowIpString].CountryFlag;
                                     row.Cells[2].ToolTipText = ipWhoisList[rowIpString].CountryName;
+                                    row.Height = ipWhoisList[rowIpString].CountryFlag.Height;
                                 }
                                 if (ipWhoisList[rowIpString].ipWhoisInfo.Org.ToLower().Contains("valve"))
                                 {
@@ -327,13 +327,13 @@ namespace DbD_Pingz
                             }
                     if (row.Cells[0].Value.ToString().Contains(address.ToString()))
                     {
-                        row.Cells[1].Value = accessTime.ToString("HH:mm:ss - dd:MM:yyyy");
+                        row.Cells[1].Value = accessTime;
                         containsKey = true;
                     }
                 }
                 if (!containsKey)
                 {
-                    previousPingInfoList.Rows.Add(new object[] { address.ToString(), accessTime.ToString("HH:mm:ss - dd:MM:yyyy"), null, false });
+                    previousPingInfoList.Rows.Add(new object[] { address.ToString(), accessTime, null, false });
                     ipWhoisList.Add(address.ToString(), new IpWhois(address.ToString()));
                 }
             }
@@ -384,7 +384,7 @@ namespace DbD_Pingz
                                     }
                                     row.Cells[1].Value = pingList[ip].TimeElapsed.Milliseconds + "ms";
                                     PacketStats stats;
-                                    if(packetStatsList.TryGetValue(ip,out stats))
+                                    if (packetStatsList.TryGetValue(ip, out stats))
                                         row.Cells[2].Value = stats.Dismissed + "/" + stats.Total + " -> " + String.Format("{0:P2}", stats.PacketLoss) + "";
                                     if (pingList[ip].TimeElapsed.Milliseconds > settings.MaximumGoodPing)
                                         row.Cells[1].Style.BackColor = settings.BadPingColor;
@@ -396,7 +396,7 @@ namespace DbD_Pingz
                         if (!containsKey && !timedOut)
                         {
                             int rowNumber;
-                            rowNumber = pingInfoList.Rows.Add(new object[] { ip.ToString(), pingList[ip].TimeElapsed.Milliseconds + "ms",  "?/? -> ?%" });
+                            rowNumber = pingInfoList.Rows.Add(new object[] { ip.ToString(), pingList[ip].TimeElapsed.Milliseconds + "ms", "?/? -> ?%" });
                             if (GetPingInfoChartSeriesColor(ip, out Color chartColor))
                             {
                                 pingInfoList.Rows[rowNumber].Cells[0].Style.BackColor = chartColor;
@@ -715,6 +715,20 @@ namespace DbD_Pingz
             System.Diagnostics.Process.Start("https://github.com/besentv/DbD_Pingz/issues/new");
         }
 
+        private void PreviousPingInfoList_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                if (previousPingInfoList.FirstDisplayedScrollingRowIndex > 0)
+                {
+                    previousPingInfoList.FirstDisplayedScrollingRowIndex = previousPingInfoList.FirstDisplayedScrollingRowIndex - 1;
+                }
+            }
+            else if (e.Delta < 0)
+            {
+                previousPingInfoList.FirstDisplayedScrollingRowIndex = previousPingInfoList.FirstDisplayedScrollingRowIndex + 1;
+            }
+        }
         #endregion
     }
 }
