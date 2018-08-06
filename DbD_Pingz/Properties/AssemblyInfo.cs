@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("besentv.xyz")]
 [assembly: AssemblyProduct("DbD_Pingz")]
-[assembly: AssemblyCopyright("Release under EUPL software licence")]
+[assembly: AssemblyCopyright("Release under MIT software licence")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
