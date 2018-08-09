@@ -56,7 +56,7 @@ namespace DbD_Pingz
 
         private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            string ret = Settings.WriteSettingsToXML(DbDPingz.saveXMLFileName, ProgramSettings);
+            string ret = Settings.WriteSettingsToXML(Pingz.saveXMLFileName, ProgramSettings);
 
             if(ret != null)
             {

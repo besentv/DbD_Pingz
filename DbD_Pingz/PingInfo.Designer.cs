@@ -45,6 +45,7 @@
             this.makeDbDPingzTopmostToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeNetworkAdapterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewConnectionStatsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportBugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,7 +65,6 @@
             this.whoisThisIPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetTableToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.killToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.printDialog1 = new System.Windows.Forms.PrintDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pingInfoList)).BeginInit();
             this.ipRightKlickMenu.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -167,6 +167,7 @@
             this.makeDbDPingzTopmostToolStripMenuItem,
             this.settingsToolStripMenuItem,
             this.changeNetworkAdapterToolStripMenuItem,
+            this.viewConnectionStatsToolStripMenuItem,
             this.reportBugToolStripMenuItem,
             this.aboutToolStripMenuItem,
             this.exitToolStripMenuItem});
@@ -195,6 +196,13 @@
             this.changeNetworkAdapterToolStripMenuItem.Size = new System.Drawing.Size(274, 22);
             this.changeNetworkAdapterToolStripMenuItem.Text = "Change Network Adapter";
             this.changeNetworkAdapterToolStripMenuItem.Click += new System.EventHandler(this.ChangeNetworkAdapterToolStripMenuItem_Click);
+            // 
+            // viewConnectionStatsToolStripMenuItem
+            // 
+            this.viewConnectionStatsToolStripMenuItem.Name = "viewConnectionStatsToolStripMenuItem";
+            this.viewConnectionStatsToolStripMenuItem.Size = new System.Drawing.Size(274, 22);
+            this.viewConnectionStatsToolStripMenuItem.Text = "View Connection Stats";
+            this.viewConnectionStatsToolStripMenuItem.Click += new System.EventHandler(this.viewConnectionStatsToolStripMenuItem_Click);
             // 
             // reportBugToolStripMenuItem
             // 
@@ -370,6 +378,7 @@
             this.Ip.MinimumWidth = 40;
             this.Ip.Name = "Ip";
             this.Ip.ReadOnly = true;
+            this.Ip.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // lastConnectionTime
             // 
@@ -424,10 +433,6 @@
             this.killToolStripMenuItem.Name = "killToolStripMenuItem";
             this.killToolStripMenuItem.Size = new System.Drawing.Size(314, 22);
             this.killToolStripMenuItem.Text = ":( (Needs elevated privileges)";
-            // 
-            // printDialog1
-            // 
-            this.printDialog1.UseEXDialog = true;
             // 
             // PingInfo
             // 
@@ -492,10 +497,10 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem killToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reportBugToolStripMenuItem;
-        private System.Windows.Forms.PrintDialog printDialog1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ipColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn PingColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn DataLoss;
+        private System.Windows.Forms.ToolStripMenuItem viewConnectionStatsToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn Ip;
         private System.Windows.Forms.DataGridViewTextBoxColumn lastConnectionTime;
         private System.Windows.Forms.DataGridViewImageColumn Country;

@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace DbD_Pingz
 {
-    class DbDPingz
+    class Pingz
     {
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -16,6 +16,7 @@ namespace DbD_Pingz
         public const string version = "1.3";
         public static string buildtype = "";
         public const string saveXMLFileName = "DbD_PingTestSave.xml";
+        public const string countryStatsDBName = "DbD_PingzCountryStats.sqlitedb";
 
         public static bool isDebug = false;
 

@@ -9,7 +9,7 @@ namespace DbD_Pingz
     {
         private static readonly Dictionary<string, string> EnglishCountryNameByIso2 = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-          
+            {"_unknown", "Unknown Country"}, //Non ISO but a fallback.
 
             {"AQ", "Antarctica"},
             {"BQ", "Bonaire, Sint Eustatius and Saba"},

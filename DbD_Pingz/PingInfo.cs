@@ -18,6 +18,7 @@ namespace DbD_Pingz
         private StripLine maxGoodPingLine = new StripLine();
 
         private Settings settings;
+        private CountryStatsDatabase countryDB = new CountryStatsDatabase(Pingz.countryStatsDBName);
 
         private PingReciever pingReciever = new PingReciever();
         private delegate void accessPingInfoControlsSafely(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime);
@@ -58,12 +59,12 @@ namespace DbD_Pingz
 
         private void LoadSettings()
         {
-            settings = Settings.LoadSettingsFromXML(DbDPingz.saveXMLFileName);
+            settings = Settings.LoadSettingsFromXML(Pingz.saveXMLFileName);
             if (settings == null)
             {
                 Console.WriteLine("Settings null... writing new.");
                 settings = new Settings();
-                Settings.WriteSettingsToXML(DbDPingz.saveXMLFileName, settings);
+                Settings.WriteSettingsToXML(Pingz.saveXMLFileName, settings);
             }
             settings.onSettingsChanged += Settings_onSettingsChanged;
 
@@ -94,7 +95,7 @@ namespace DbD_Pingz
             {
                 settings.LastNetworkAdapterName = pingReciever.SniffingDevice.Name;
             }
-            Settings.WriteSettingsToXML(DbDPingz.saveXMLFileName, settings);
+            Settings.WriteSettingsToXML(Pingz.saveXMLFileName, settings);
         }
 
         private void ChangeNetworkAdapter(bool forceChange)
@@ -265,27 +266,11 @@ namespace DbD_Pingz
                     }
                 }
             }
-
-            //else
-            //{
-            //    foreach (IpV4Address ip in validateList.Keys)
-            //    {
-            //        TimeSpan timeSinceLastRecievedPackage = DateTime.Now - validateList[ip].RecievedPacketTime;
-            //        if (timeSinceLastRecievedPackage.Seconds >= settings.SecondsUntilIPTimeout)
-            //        {
-            //            Console.WriteLine("Ip:" + ip.ToString() + " timed out! Will be removed in:" + ((settings.SecondsUntilIPTimeout + settings.SecondsUntilTimeoutedIpRemoved) - timeSinceLastRecievedPackage.Seconds) + "seconds.");
-            //            if (timeSinceLastRecievedPackage.Seconds >= (settings.SecondsUntilIPTimeout + settings.SecondsUntilTimeoutedIpRemoved))
-            //            {
-            //                if (validateList.TryRemove(ip, out Ping ignored))
-            //                {
-            //                    Console.WriteLine("Ip:" + ip.ToString() + " was removed from pinglist!");
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-
         }
+
+        #endregion
+
+        #region PingInfoSubscribers
 
         private void PreviousPingInfoList_SetPings(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime)
         {
@@ -310,7 +295,7 @@ namespace DbD_Pingz
                     }
                     if (row.Cells[2].Value == null)
                         if (ipWhoisList.ContainsKey(rowIpString))
-                            if (ipWhoisList[rowIpString].isJsonParsed)
+                            if (ipWhoisList[rowIpString].workDone)
                             {
                                 if (ipWhoisList[rowIpString].CountryFlag != null)
                                 {
@@ -321,12 +306,15 @@ namespace DbD_Pingz
                                         row.Height = ipWhoisList[rowIpString].CountryFlag.Height;
                                     }
                                 }
-                                if (ipWhoisList[rowIpString].ipWhoisInfo.Org.ToLower().Contains("valve"))
+                                if (ipWhoisList[rowIpString].isJsonParsed)
                                 {
-                                    row.Cells[3].Value = true;
-                                    Console.WriteLine("ISP OF " + rowIpString + " IS VALVE!");
+                                    if (ipWhoisList[rowIpString].ipWhoisInfo.Org.ToLower().Contains("valve"))
+                                    {
+                                        row.Cells[3].Value = true;
+                                        Console.WriteLine("ISP OF " + rowIpString + " IS VALVE!");
+                                    }
                                 }
-                                ipWhoisList.Remove(rowIpString);
+                                //ipWhoisList.Remove(rowIpString);
                             }
                     if (row.Cells[0].Value.ToString().Contains(address.ToString()))
                     {
@@ -337,7 +325,6 @@ namespace DbD_Pingz
                 if (!containsKey)
                 {
                     previousPingInfoList.Rows.Add(new object[] { address.ToString(), accessTime, null, false });
-                    ipWhoisList.Add(address.ToString(), new IpWhois(address.ToString()));
                 }
             }
             previousPingInfoList.Sort(previousPingInfoList.Columns[1], ListSortDirection.Descending);
@@ -396,8 +383,25 @@ namespace DbD_Pingz
                                 containsKey = true;
                             }
                         }
-                        if (!containsKey && !timedOut)
+                        if (!containsKey && !timedOut) //Add row if list doesn't contain IP.
                         {
+                            if (!ipWhoisList.ContainsKey(ip.ToString())) //First WHOIS new ips.
+                            {
+                                Console.WriteLine("Could not find entry for " + ip.ToString() + "in ipWhoisList! Going to whois...");
+                                ipWhoisList.Add(ip.ToString(), new IpWhois(ip.ToString(), countryDB));
+                            }
+                            else if (ipWhoisList.ContainsKey(ip.ToString()))
+                            {
+                                Console.WriteLine("Found entry for " + ip.ToString() + "in ipWhoisList!");
+                                if (ipWhoisList[ip.ToString()].ipWhoisInfo != null)
+                                {
+                                    if (countryDB != null)
+                                    {
+                                        countryDB.IncrementCountry(ipWhoisList[ip.ToString()].ipWhoisInfo.Country);
+                                    }
+                                }
+                            }
+
                             int rowNumber;
                             rowNumber = pingInfoList.Rows.Add(new object[] { ip.ToString(), pingList[ip].TimeElapsed.Milliseconds + "ms", "?/? -> ?%" });
                             if (GetPingInfoChartSeriesColor(ip, out Color chartColor))
@@ -631,7 +635,7 @@ namespace DbD_Pingz
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new About(DbDPingz.buildtype).ShowDialog(this);
+            new About(Pingz.buildtype).ShowDialog(this);
         }
 
         private void NetworkingBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -731,6 +735,11 @@ namespace DbD_Pingz
             {
                 previousPingInfoList.FirstDisplayedScrollingRowIndex = previousPingInfoList.FirstDisplayedScrollingRowIndex + 1;
             }
+        }
+
+        private void viewConnectionStatsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            countryDB.PrintTableDebugList();
         }
         #endregion
     }
