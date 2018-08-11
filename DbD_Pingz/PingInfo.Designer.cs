@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PingInfo));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pingInfoList = new System.Windows.Forms.DataGridView();
             this.ipColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PingColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -229,39 +229,39 @@
             // 
             // pingInfoChart
             // 
-            chartArea1.AxisX.Interval = 1D;
-            chartArea1.AxisX.IntervalOffset = 1D;
-            chartArea1.AxisX.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea1.AxisX.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea1.AxisX.IsMarginVisible = false;
-            chartArea1.AxisX.LabelStyle.Enabled = false;
-            chartArea1.AxisX.ScaleView.MinSize = 20D;
-            chartArea1.AxisX.ScaleView.Position = 0D;
-            chartArea1.AxisX.ScaleView.Size = 20D;
-            chartArea1.AxisX.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea1.AxisX.ScrollBar.Enabled = false;
-            chartArea1.AxisX.Title = "Time";
-            chartArea1.AxisY.Interval = 25D;
-            chartArea1.AxisY.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
-            chartArea1.AxisY.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea1.AxisY.IsLabelAutoFit = false;
-            chartArea1.AxisY.IsMarginVisible = false;
-            chartArea1.AxisY.LabelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            chartArea1.AxisY.Minimum = 0D;
-            chartArea1.AxisY.ScaleView.Size = 250D;
-            chartArea1.AxisY.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea1.AxisY.ScrollBar.Enabled = false;
-            chartArea1.AxisY.Title = "Ping";
-            chartArea1.AxisY.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            chartArea1.BorderWidth = 0;
-            chartArea1.Name = "pingChartArea";
-            this.pingInfoChart.ChartAreas.Add(chartArea1);
+            chartArea4.AxisX.Interval = 1D;
+            chartArea4.AxisX.IntervalOffset = 1D;
+            chartArea4.AxisX.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea4.AxisX.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea4.AxisX.IsMarginVisible = false;
+            chartArea4.AxisX.LabelStyle.Enabled = false;
+            chartArea4.AxisX.ScaleView.MinSize = 20D;
+            chartArea4.AxisX.ScaleView.Position = 0D;
+            chartArea4.AxisX.ScaleView.Size = 20D;
+            chartArea4.AxisX.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea4.AxisX.ScrollBar.Enabled = false;
+            chartArea4.AxisX.Title = "Time";
+            chartArea4.AxisY.Interval = 25D;
+            chartArea4.AxisY.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
+            chartArea4.AxisY.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea4.AxisY.IsLabelAutoFit = false;
+            chartArea4.AxisY.IsMarginVisible = false;
+            chartArea4.AxisY.LabelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            chartArea4.AxisY.Minimum = 0D;
+            chartArea4.AxisY.ScaleView.Size = 250D;
+            chartArea4.AxisY.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea4.AxisY.ScrollBar.Enabled = false;
+            chartArea4.AxisY.Title = "Ping";
+            chartArea4.AxisY.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            chartArea4.BorderWidth = 0;
+            chartArea4.Name = "pingChartArea";
+            this.pingInfoChart.ChartAreas.Add(chartArea4);
             this.pingInfoChart.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pingInfoChart.IsSoftShadows = false;
-            legend1.IsTextAutoFit = false;
-            legend1.MaximumAutoSize = 30F;
-            legend1.Name = "Legend1";
-            this.pingInfoChart.Legends.Add(legend1);
+            legend4.IsTextAutoFit = false;
+            legend4.MaximumAutoSize = 30F;
+            legend4.Name = "Legend1";
+            this.pingInfoChart.Legends.Add(legend4);
             this.pingInfoChart.Location = new System.Drawing.Point(0, 40);
             this.pingInfoChart.Margin = new System.Windows.Forms.Padding(0);
             this.pingInfoChart.Name = "pingInfoChart";
@@ -299,6 +299,7 @@
             this.splitContainer1.Size = new System.Drawing.Size(471, 506);
             this.splitContainer1.SplitterDistance = 142;
             this.splitContainer1.TabIndex = 4;
+            this.splitContainer1.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer1_SplitterMoved);
             // 
             // labelNoAdapter1
             // 
@@ -345,6 +346,7 @@
             this.splitContainer2.Size = new System.Drawing.Size(814, 506);
             this.splitContainer2.SplitterDistance = 339;
             this.splitContainer2.TabIndex = 5;
+            this.splitContainer2.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer2_SplitterMoved);
             // 
             // previousPingInfoList
             // 
@@ -383,8 +385,8 @@
             // lastConnectionTime
             // 
             this.lastConnectionTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle1.Format = "HH:mm:ss - dd:MM:yyyy";
-            this.lastConnectionTime.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Format = "HH:mm:ss - dd:MM:yyyy";
+            this.lastConnectionTime.DefaultCellStyle = dataGridViewCellStyle4;
             this.lastConnectionTime.HeaderText = "Last time connected at";
             this.lastConnectionTime.MinimumWidth = 40;
             this.lastConnectionTime.Name = "lastConnectionTime";
@@ -449,6 +451,7 @@
             this.Text = "DbD pingz";
             this.TransparencyKey = System.Drawing.SystemColors.HotTrack;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PingInfo_FormClosing);
+            this.Resize += new System.EventHandler(this.PingInfo_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pingInfoList)).EndInit();
             this.ipRightKlickMenu.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);

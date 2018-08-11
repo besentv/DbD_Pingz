@@ -86,15 +86,6 @@ namespace DbD_Pingz
 
         private void SaveSettings()
         {
-            settings.PingInfoChartScale = (int)pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size;
-            settings.DbDPingzIsTopmost = this.TopMost;
-            settings.PingInfoFormSize = this.Size;
-            settings.MainWindowSplitter1Distance = splitContainer1.SplitterDistance;
-            settings.MainWindowSplitter2Distance = splitContainer2.SplitterDistance;
-            if (!(pingReciever.SniffingDevice == null))
-            {
-                settings.LastNetworkAdapterName = pingReciever.SniffingDevice.Name;
-            }
             Settings.WriteSettingsToXML(Pingz.saveXMLFileName, settings);
         }
 
@@ -443,7 +434,7 @@ namespace DbD_Pingz
             {
                 if (!pingList.IsEmpty)
                 {
-                    // pingInfoChart.Series.SuspendUpdates();
+                    //pingInfoChart.Series.SuspendUpdates();
                     List<Series> seriesToDelete = new List<Series>();
                     if (chartCounter >= Int32.MaxValue)
                     {
@@ -588,6 +579,7 @@ namespace DbD_Pingz
             {
                 this.TopMost = false;
             }
+            settings.DbDPingzIsTopmost = this.TopMost;
             Console.WriteLine("Program is topmost:" + this.TopMost);
         }
 
@@ -693,7 +685,7 @@ namespace DbD_Pingz
             }
             else if (e.ClickedItem == killToolStripMenuItem)
             {
-
+                // ( NEEDS ADMIN PRIVILEGES ;) )
             }
         }
 
@@ -735,12 +727,34 @@ namespace DbD_Pingz
             {
                 previousPingInfoList.FirstDisplayedScrollingRowIndex = previousPingInfoList.FirstDisplayedScrollingRowIndex + 1;
             }
+            settings.PingInfoChartScale = (int)pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size;
         }
 
         private void viewConnectionStatsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             countryDB.PrintTableDebugList();
         }
+
+        private void PingInfo_Resize(object sender, EventArgs e)
+        {
+            settings.PingInfoFormSize = this.Size;
+        }
+
+        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            SplitContainer splitContainer = (SplitContainer)sender;
+            settings.MainWindowSplitter1Distance = splitContainer.SplitterDistance;
+        }
+
+        private void splitContainer2_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            SplitContainer splitContainer = (SplitContainer)sender;
+            settings.MainWindowSplitter2Distance = splitContainer.SplitterDistance;
+        }
+        #endregion
+
+        #region OVERRIDES
+
         #endregion
     }
 }

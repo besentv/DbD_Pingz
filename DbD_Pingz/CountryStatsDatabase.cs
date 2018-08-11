@@ -67,7 +67,7 @@ namespace DbD_Pingz
             GC.SuppressFinalize(this);
         }
 
-        public virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             Console.WriteLine("Disposing CountryStats object");
             if (disposed)
