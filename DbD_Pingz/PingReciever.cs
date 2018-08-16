@@ -1,6 +1,8 @@
 ﻿using PcapDotNet.Core;
 using PcapDotNet.Packets;
 using PcapDotNet.Packets.IpV4;
+using PcapDotNet.Packets.IpV6;
+using PcapDotNet.Packets.Ip;
 using PcapDotNet.Packets.Transport;
 using System;
 using System.Collections.Generic;
@@ -121,40 +123,39 @@ namespace DbD_Pingz
                 return;
             }
 
-            IpV4Datagram ip = packet.Ethernet.IpV4;
-            UdpDatagram udp = ip.Udp;
+            IpV4Datagram ipV4Packet = packet.Ethernet.IpV4;
+            UdpDatagram udp = ipV4Packet.Udp;
 
-            if (udp.Payload.Length == 68 && ip.Destination == thisMachinesIpV4Address && udp.Payload[0] == 0x01)//STUN Reply from OTHER Ip! First payload byte for a STUN response is 1. 
+            if (udp.Payload.Length == 68 && ipV4Packet.Destination == thisMachinesIpV4Address && udp.Payload[0] == 0x01)//STUN Reply from OTHER Ip! First payload byte for a STUN response is 1. 
             {
                 DataSegment transactionID = udp.Payload.Subsegment(4, 19);
 
-                if (waitingForResponse.ContainsKey(ip.Source))
+                if (waitingForResponse.ContainsKey(ipV4Packet.Source))
                 {
-                    waitingForResponse.TryGetValue(ip.Source, out StunInfo stunInfo);
+                    waitingForResponse.TryGetValue(ipV4Packet.Source, out StunInfo stunInfo);
                     if (stunInfo.transactionID.Equals(transactionID))
                     {
-                        waitingForResponse.Remove(ip.Source);
-                        CalculatedPingEvent(this, new Ping(ip.Source, stunInfo.sendTime, packet.Timestamp));
+                        waitingForResponse.Remove(ipV4Packet.Source);
+                        CalculatedPingEvent(this, new Ping(ipV4Packet.Source, stunInfo.sendTime, packet.Timestamp));
                     }
                 }
             }
-
             else
             {
-                if (udp.Payload.Length == 56 && ip.Source == thisMachinesIpV4Address && udp.Payload[0] == 0x00) //STUN Request from OWN Ip! 
+                if (udp.Payload.Length == 56 && ipV4Packet.Source == thisMachinesIpV4Address && udp.Payload[0] == 0x00) //STUN Request from OWN Ip! 
                 {
                     DataSegment transactionID = udp.Payload.Subsegment(4, 19);
                     StunInfo stunInfo = new StunInfo(packet.Timestamp, transactionID);
 
-                    if (!waitingForResponse.ContainsKey(ip.Destination))
+                    if (!waitingForResponse.ContainsKey(ipV4Packet.Destination))
                     {                       
-                        waitingForResponse.Add(ip.Destination, stunInfo);
+                        waitingForResponse.Add(ipV4Packet.Destination, stunInfo);
                     }
-                    else if (waitingForResponse.ContainsKey(ip.Destination))
+                    else if (waitingForResponse.ContainsKey(ipV4Packet.Destination))
                     {
-                        waitingForResponse.Remove(ip.Destination);
-                        waitingForResponse.Add(ip.Destination, stunInfo);
-                        DismissedPacketEvent(this, new DismissedPacketEventStats(ip.Destination));
+                        waitingForResponse.Remove(ipV4Packet.Destination);
+                        waitingForResponse.Add(ipV4Packet.Destination, stunInfo);
+                        DismissedPacketEvent(this, new DismissedPacketEventStats(ipV4Packet.Destination));
                     }
                 }
             }

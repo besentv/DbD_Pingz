@@ -159,7 +159,7 @@
             this.label5.Location = new System.Drawing.Point(5, 35);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(216, 20);
-            this.label5.TabIndex = 0;
+            this.label5.TabIndex = 2;
             this.label5.Text = "Seconds until timeouted ip remove:";
             this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
@@ -211,7 +211,7 @@
             this.label6.Location = new System.Drawing.Point(12, 165);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(174, 20);
-            this.label6.TabIndex = 7;
+            this.label6.TabIndex = 0;
             this.label6.Text = "Ping info chart color palette:";
             this.label6.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
@@ -221,7 +221,7 @@
             this.label7.Location = new System.Drawing.Point(66, 189);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(120, 20);
-            this.label7.TabIndex = 8;
+            this.label7.TabIndex = 0;
             this.label7.Text = "Use average ping:";
             this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
@@ -231,7 +231,7 @@
             this.useAveragePingCheckBox.Location = new System.Drawing.Point(192, 192);
             this.useAveragePingCheckBox.Name = "useAveragePingCheckBox";
             this.useAveragePingCheckBox.Size = new System.Drawing.Size(15, 14);
-            this.useAveragePingCheckBox.TabIndex = 9;
+            this.useAveragePingCheckBox.TabIndex = 7;
             this.useAveragePingCheckBox.UseVisualStyleBackColor = true;
             this.useAveragePingCheckBox.CheckedChanged += new System.EventHandler(this.useAveragePingCheckBox_CheckedChanged);
             // 

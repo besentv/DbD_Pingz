@@ -265,60 +265,63 @@ namespace DbD_Pingz
 
         private void PreviousPingInfoList_SetPings(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime)
         {
-            foreach (IpV4Address address in pingList.Keys)
+            if (pingInfoList.InvokeRequired)
             {
-                bool containsKey = false;
-                foreach (DataGridViewRow row in previousPingInfoList.Rows)
-                {
-                    String rowIpString = row.Cells[0].Value.ToString();
-                    IpV4Address rowIpV4Address;
-                    if (IpV4Address.TryParse(rowIpString, out rowIpV4Address))
-                    {
-                        Color chartIpColor;
-                        if (GetPingInfoChartSeriesColor(rowIpV4Address, out chartIpColor))
-                        {
-                            row.Cells[0].Style.BackColor = chartIpColor;
-                        }
-                        else
-                        {
-                            row.Cells[0].Style.BackColor = Color.White;
-                        }
-                    }
-                    if (row.Cells[2].Value == null)
-                        if (ipWhoisList.ContainsKey(rowIpString))
-                            if (ipWhoisList[rowIpString].workDone)
-                            {
-                                if (ipWhoisList[rowIpString].CountryFlag != null)
-                                {
-                                    row.Cells[2].Value = ipWhoisList[rowIpString].CountryFlag;
-                                    row.Cells[2].ToolTipText = ipWhoisList[rowIpString].CountryName;
-                                    if (row.Height < ipWhoisList[rowIpString].CountryFlag.Height)
-                                    {
-                                        row.Height = ipWhoisList[rowIpString].CountryFlag.Height;
-                                    }
-                                }
-                                if (ipWhoisList[rowIpString].isJsonParsed)
-                                {
-                                    if (ipWhoisList[rowIpString].ipWhoisInfo.Org.ToLower().Contains("valve"))
-                                    {
-                                        row.Cells[3].Value = true;
-                                        Console.WriteLine("ISP OF " + rowIpString + " IS VALVE!");
-                                    }
-                                }
-                                //ipWhoisList.Remove(rowIpString);
-                            }
-                    if (row.Cells[0].Value.ToString().Contains(address.ToString()))
-                    {
-                        row.Cells[1].Value = accessTime;
-                        containsKey = true;
-                    }
-                }
-                if (!containsKey)
-                {
-                    previousPingInfoList.Rows.Add(new object[] { address.ToString(), accessTime, null, false });
-                }
+                accessPingInfoControlsSafely caller = new accessPingInfoControlsSafely(PreviousPingInfoList_SetPings);
+                this.Invoke(caller, new object[] { pingList, accessTime });
             }
-            previousPingInfoList.Sort(previousPingInfoList.Columns[1], ListSortDirection.Descending);
+            else
+            {
+                foreach (IpV4Address address in pingList.Keys)
+                {
+                    bool containsKey = false;
+                    foreach (DataGridViewRow row in previousPingInfoList.Rows)
+                    {
+                        String rowIpString = row.Cells[0].Value.ToString();
+                        Color chartIpColor;
+                        if (row.Cells[0].Value.ToString().Contains(address.ToString()))
+                        {
+                            containsKey = true;
+                            if (GetPingInfoChartSeriesColor(rowIpString, out chartIpColor))
+                            {
+                                row.Cells[0].Style.BackColor = chartIpColor;
+                            }
+                            else
+                            {
+                                row.Cells[0].Style.BackColor = Color.White;
+                            }
+                            row.Cells[1].Value = accessTime;
+                        }
+                        if (row.Cells[2].Value == null)
+                            if (ipWhoisList.ContainsKey(rowIpString))
+                                if (ipWhoisList[rowIpString].workDone)
+                                {
+                                    if (ipWhoisList[rowIpString].CountryFlag != null)
+                                    {
+                                        row.Cells[2].Value = ipWhoisList[rowIpString].CountryFlag;
+                                        row.Cells[2].ToolTipText = ipWhoisList[rowIpString].CountryName;
+                                        if (row.Height < ipWhoisList[rowIpString].CountryFlag.Height)
+                                        {
+                                            row.Height = ipWhoisList[rowIpString].CountryFlag.Height;
+                                        }
+                                    }
+                                    if (ipWhoisList[rowIpString].isJsonParsed)
+                                    {
+                                        if (ipWhoisList[rowIpString].ipWhoisInfo.Org.ToLower().Contains("valve"))
+                                        {
+                                            row.Cells[3].Value = true;
+                                            Console.WriteLine("ISP OF " + rowIpString + " IS VALVE!");
+                                        }
+                                    }
+                                }
+                    }
+                    if (!containsKey)
+                    {
+                        previousPingInfoList.Rows.Add(new object[] { address.ToString(), accessTime, null, false });
+                    }
+                }
+                previousPingInfoList.Sort(previousPingInfoList.Columns[1], ListSortDirection.Descending);
+            }
         }
 
         private void PingInfoList_SetPings(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime)
@@ -359,7 +362,7 @@ namespace DbD_Pingz
                                 }
                                 else
                                 {
-                                    if (GetPingInfoChartSeriesColor(ip, out Color chartColor))
+                                    if (GetPingInfoChartSeriesColor(ip.ToString(), out Color chartColor))
                                     {
                                         row.Cells[0].Style.BackColor = chartColor;
                                     }
@@ -395,7 +398,7 @@ namespace DbD_Pingz
 
                             int rowNumber;
                             rowNumber = pingInfoList.Rows.Add(new object[] { ip.ToString(), pingList[ip].TimeElapsed.Milliseconds + "ms", "?/? -> ?%" });
-                            if (GetPingInfoChartSeriesColor(ip, out Color chartColor))
+                            if (GetPingInfoChartSeriesColor(ip.ToString(), out Color chartColor))
                             {
                                 pingInfoList.Rows[rowNumber].Cells[0].Style.BackColor = chartColor;
                             }
@@ -517,12 +520,12 @@ namespace DbD_Pingz
                 }
             }
         }
-        private bool GetPingInfoChartSeriesColor(IpV4Address ip, out Color color)
+        private bool GetPingInfoChartSeriesColor(String ipString, out Color color)
         {
             pingInfoChart.ApplyPaletteColors();
-            if (!pingInfoChart.Series.IsUniqueName(ip.ToString()))
+            if (!pingInfoChart.Series.IsUniqueName(ipString))
             {
-                color = pingInfoChart.Series[ip.ToString()].Color;
+                color = pingInfoChart.Series[ipString].Color;
                 return true;
             }
             color = new Color();
@@ -732,7 +735,8 @@ namespace DbD_Pingz
 
         private void viewConnectionStatsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            countryDB.PrintTableDebugList();
+           // countryDB.PrintTableDebugList();
+            new CountryStatsForm(countryDB.GetDataTableFromTable()).ShowDialog(this);
         }
 
         private void PingInfo_Resize(object sender, EventArgs e)

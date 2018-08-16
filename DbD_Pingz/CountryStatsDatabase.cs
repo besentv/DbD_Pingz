@@ -44,7 +44,7 @@ namespace DbD_Pingz
             }
         }
 
-        public void PrintTableDebugList()
+        public DataTable GetDataTableFromTable()
         {
             SQLiteCommand cmd = new SQLiteCommand(sQLiteConnection);
             cmd.CommandText = "SELECT * FROM pingz_countrytable";
@@ -53,12 +53,14 @@ namespace DbD_Pingz
             DataTable data = new DataTable();
             data.Load(dataReader);
 
-            foreach(DataRow row in data.Rows)
+            foreach (DataRow row in data.Rows)
             {
                 Console.WriteLine(row[0] + " - " + row[1]);
             }
 
             cmd.Dispose();
+
+            return data;
         }
 
         public void Dispose()

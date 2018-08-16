@@ -92,6 +92,12 @@
     </Compile>
     <Compile Include="CountryIdConverter.cs" />
     <Compile Include="CountryStatsDatabase.cs" />
+    <Compile Include="CountryStatsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CountryStatsForm.Designer.cs">
+      <DependentUpon>CountryStatsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="IpWhois.cs" />
     <Compile Include="NetworkChooser.cs">
       <SubType>Form</SubType>
@@ -151,6 +157,9 @@
   <ItemGroup>
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CountryStatsForm.resx">
+      <DependentUpon>CountryStatsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="networkChooser.resx">
       <DependentUpon>NetworkChooser.cs</DependentUpon>

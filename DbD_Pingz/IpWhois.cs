@@ -58,6 +58,7 @@ namespace DbD_Pingz
             string requestUrl = "http://ipinfo.io/" + ip + "/json";
 
             whoisInfoString = getWhoisInfo(requestUrl);
+
             if (gotWhoisData)
             {
                 Console.WriteLine("Trying to deserialize JSON");
