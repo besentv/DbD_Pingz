@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CountryStatsForm));
             this.countryStatsDataGridView = new System.Windows.Forms.DataGridView();
             this.countrycode = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -52,7 +54,7 @@
             this.countryStatsDataGridView.Name = "countryStatsDataGridView";
             this.countryStatsDataGridView.ReadOnly = true;
             this.countryStatsDataGridView.RowHeadersVisible = false;
-            this.countryStatsDataGridView.Size = new System.Drawing.Size(516, 328);
+            this.countryStatsDataGridView.Size = new System.Drawing.Size(391, 551);
             this.countryStatsDataGridView.TabIndex = 0;
             this.countryStatsDataGridView.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.countryStatsDataGridView_RowsAdded);
             // 
@@ -60,6 +62,9 @@
             // 
             this.countrycode.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.countrycode.DataPropertyName = "countrycode";
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.countrycode.DefaultCellStyle = dataGridViewCellStyle1;
             this.countrycode.HeaderText = "Country Code";
             this.countrycode.Name = "countrycode";
             this.countrycode.ReadOnly = true;
@@ -68,6 +73,9 @@
             // 
             this.Amount.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Amount.DataPropertyName = "amount";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Amount.DefaultCellStyle = dataGridViewCellStyle2;
             this.Amount.HeaderText = "Amount";
             this.Amount.Name = "Amount";
             this.Amount.ReadOnly = true;
@@ -83,7 +91,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(516, 328);
+            this.ClientSize = new System.Drawing.Size(391, 551);
             this.Controls.Add(this.countryStatsDataGridView);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "CountryStatsForm";

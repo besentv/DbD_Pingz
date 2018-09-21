@@ -13,7 +13,7 @@ namespace DbD_Pingz
 
         public static bool ConsoleAllocated = false;
 
-        public const string version = "1.3";
+        public const string version = "1.4";
         public static string buildtype = "";
         public const string saveXMLFileName = "DbD_PingTestSave.xml";
         public const string countryStatsDBName = "DbD_PingzCountryStats.sqlitedb";

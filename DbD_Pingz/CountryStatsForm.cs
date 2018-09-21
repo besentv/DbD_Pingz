@@ -26,11 +26,12 @@ namespace DbD_Pingz
             countryStatsDataGridView.Columns[0].ValueType = typeof(String);
             countryStatsDataGridView.Columns["CountryFlag"].DefaultCellStyle.NullValue = null;
             countryStatsDataGridView.DataSource = contents;
+            countryStatsDataGridView.Sort(countryStatsDataGridView.Columns["amount"], ListSortDirection.Descending);
+            countryStatsDataGridView.Rows[0].Cells[0].Selected = false;
         }
 
         private void countryStatsDataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
-            Console.WriteLine("RowAdded");
             DataGridView countryStats = (DataGridView)sender;
 
             for (int i = e.RowIndex; i < (e.RowIndex + e.RowCount); i++)
