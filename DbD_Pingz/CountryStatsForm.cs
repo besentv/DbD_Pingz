@@ -16,18 +16,22 @@ namespace DbD_Pingz
 
         public CountryStatsForm(DataTable contents)
         {
-            countryStatsContent = contents;
-
             InitializeComponent();
+
+            countryStatsContent = contents;
 
             Console.WriteLine("Data types:" + contents.Columns[0].DataType.ToString() + " - " + contents.Columns[1].DataType.ToString());
 
             countryStatsDataGridView.Columns[1].ValueType = typeof(Int64);
             countryStatsDataGridView.Columns[0].ValueType = typeof(String);
             countryStatsDataGridView.Columns["CountryFlag"].DefaultCellStyle.NullValue = null;
-            countryStatsDataGridView.DataSource = contents;
             countryStatsDataGridView.Sort(countryStatsDataGridView.Columns["amount"], ListSortDirection.Descending);
-            countryStatsDataGridView.Rows[0].Cells[0].Selected = false;
+            countryStatsDataGridView.DataSource = contents;
+
+            if (contents.Rows.Count > 0 && contents.Rows.Count > 0)
+            {    
+                countryStatsDataGridView.Rows[0].Cells[0].Selected = false;
+            }
         }
 
         private void countryStatsDataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
