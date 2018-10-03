@@ -1,4 +1,9 @@
-﻿using System.ComponentModel;
+﻿/*
+ * Everything in here is used to grab IP information from ipinfo.io.
+ * This is pretty much hardcoded so if something doesn't work anymore it has to be changed here!
+ * 
+ */
+using System.ComponentModel;
 using System.IO;
 using System.Net;
 using Newtonsoft.Json;
@@ -31,7 +36,7 @@ namespace DbD_Pingz
         public IpWhoisInfo ipWhoisInfo;
         private CountryStatsDatabase statsDatabase;
 
-        private const int TimeUntilTimeout = 1000;
+        private const int TimeUntilTimeout = 30000;
 
         public IpWhois(string ip)
         {

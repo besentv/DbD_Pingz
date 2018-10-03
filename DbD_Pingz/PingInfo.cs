@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * This file controls everything happening in the main window.
+ * 
+ *
+ */ 
+
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
