@@ -26,9 +26,9 @@ namespace DbD_Pingz
 
     class IpWhois
     {
-        public string whoisInfoString { get; private set; } = null;
-        public bool isJsonParsed { get; private set; } = false;
-        public bool gotWhoisData { get; private set; } = false;
+        public string WhoisInfoString { get; private set; } = null;
+        public bool IsJsonParsed { get; private set; } = false;
+        public bool GotWhoisData { get; private set; } = false;
         public bool workDone { get; private set; } = false;
         public Image CountryFlag { get; private set; } = null;
         public string CountryName { get; private set; } = "";
@@ -62,13 +62,13 @@ namespace DbD_Pingz
             string ip = (string)e.Argument;
             string requestUrl = "http://ipinfo.io/" + ip + "/json";
 
-            whoisInfoString = getWhoisInfo(requestUrl);
+            WhoisInfoString = getWhoisInfo(requestUrl);
 
-            if (gotWhoisData)
+            if (GotWhoisData)
             {
                 Console.WriteLine("Trying to deserialize JSON");
-                ipWhoisInfo = JsonConvert.DeserializeObject<IpWhoisInfo>(whoisInfoString);
-                isJsonParsed = true;           
+                ipWhoisInfo = JsonConvert.DeserializeObject<IpWhoisInfo>(WhoisInfoString);
+                IsJsonParsed = true;           
             }
             else
             {
@@ -102,7 +102,7 @@ namespace DbD_Pingz
                 string content = reader.ReadToEnd();
                 reader.Close();
                 response.Close();
-                gotWhoisData = true;
+                GotWhoisData = true;
                 Console.WriteLine("GOT whois data");
 
                 return content;
@@ -110,7 +110,7 @@ namespace DbD_Pingz
             catch (WebException ex)
             {
                 Console.WriteLine(ex.ToString());
-                gotWhoisData = false;
+                GotWhoisData = false;
 
                 return null;
             }

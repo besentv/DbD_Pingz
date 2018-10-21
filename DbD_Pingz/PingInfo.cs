@@ -27,11 +27,11 @@ namespace DbD_Pingz
         private CountryStatsDatabase countryDB = new CountryStatsDatabase(Pingz.countryStatsDBName);
 
         private PingReciever pingReciever = new PingReciever();
-        private delegate void accessPingInfoControlsSafely(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime);
+        private delegate void AccessPingInfoControlsSafely(ConcurrentDictionary<IpV4Address, Ping> pingList, DateTime accessTime);
         private ConcurrentDictionary<IpV4Address, Ping> pingList = new ConcurrentDictionary<IpV4Address, Ping>();
         private ConcurrentDictionary<IpV4Address, PacketStats> packetStatsList = new ConcurrentDictionary<IpV4Address, PacketStats>();
         private Dictionary<String, IpWhois> ipWhoisList = new Dictionary<String, IpWhois>();
-        private List<accessPingInfoControlsSafely> pingInformationSubscriberList = new List<accessPingInfoControlsSafely>();
+        private List<AccessPingInfoControlsSafely> pingInformationSubscriberList = new List<AccessPingInfoControlsSafely>();
         private ConcurrentDictionary<IpV4Address, List<TimeSpan>> pingHistory = new ConcurrentDictionary<IpV4Address, List<TimeSpan>>();
         private int chartCounter = 0;
 
@@ -50,12 +50,12 @@ namespace DbD_Pingz
             previousPingInfoList.MouseWheel += new MouseEventHandler(PreviousPingInfoList_MouseWheel);
             //maxGoodPingLine.Text = "Max. Good Ping";
 
-            pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.PingInfoChart_SetPings)); //Chart first to get the line colors!
-            pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.PingInfoList_SetPings));
-            pingInformationSubscriberList.Add(new accessPingInfoControlsSafely(this.PreviousPingInfoList_SetPings));
+            pingInformationSubscriberList.Add(new AccessPingInfoControlsSafely(this.PingInfoChart_SetPings)); //Chart first to get the line colors!
+            pingInformationSubscriberList.Add(new AccessPingInfoControlsSafely(this.PingInfoList_SetPings));
+            pingInformationSubscriberList.Add(new AccessPingInfoControlsSafely(this.PreviousPingInfoList_SetPings));
 
-            pingReciever.CalculatedPingEvent += new CalculatedPingEventHandler(this.GetPings);
-            pingReciever.DismissedPacketEvent += new DismissedPacketHandler(this.GetDismissedPacket);
+            pingReciever.CalculatedPingEvent += new CalculatedPingEventHandler(this.getPings);
+            pingReciever.DismissedPacketEvent += new DismissedPacketHandler(this.getDismissedPacket);
             pingInfoChart.MouseWheel += new MouseEventHandler(PingInfoChart_MouseWheel);
             //pingInfoChart.ChartAreas[0].AxisY.StripLines.Add(maxGoodPingLine);
             pingInfoChart.ChartAreas[0].Position = new ElementPosition(0, 0, 100, 100); //Less whitespace around the chart
@@ -139,7 +139,7 @@ namespace DbD_Pingz
 
         #region Ping Info Controls Management
 
-        public void GetDismissedPacket(object sender, DismissedPacketEventStats dismissedPacketEventStats)
+        public void getDismissedPacket(object sender, DismissedPacketEventStats dismissedPacketEventStats)
         {
             if (packetStatsList.ContainsKey(dismissedPacketEventStats.address))
             {
@@ -155,7 +155,7 @@ namespace DbD_Pingz
             }
         }
 
-        public void GetPings(object sender, Ping ping)
+        public void getPings(object sender, Ping ping)
         {
             if (packetStatsList.ContainsKey(ping.Ip))
             {
@@ -175,7 +175,7 @@ namespace DbD_Pingz
         {
             ConcurrentDictionary<IpV4Address, Ping> pingListCopy = pingList;
             CalculateAveragePing(pingListCopy);
-            foreach (accessPingInfoControlsSafely subscriber in pingInformationSubscriberList)
+            foreach (AccessPingInfoControlsSafely subscriber in pingInformationSubscriberList)
             {
                 this.Invoke(subscriber, new object[] { pingListCopy, DateTime.Now });
             }
@@ -203,8 +203,10 @@ namespace DbD_Pingz
 
                     if (!pingHistory.ContainsKey(address))
                     {
-                        List<TimeSpan> pings = new List<TimeSpan>(new TimeSpan[] { validateList[address].TimeElapsed });
-                        pings.Capacity = 20;
+                        List<TimeSpan> pings = new List<TimeSpan>(new TimeSpan[] { validateList[address].TimeElapsed })
+                        {
+                            Capacity = 20
+                        };
 
                         pingHistory.TryAdd(address, pings);
                     }
@@ -273,7 +275,7 @@ namespace DbD_Pingz
         {
             if (pingInfoList.InvokeRequired)
             {
-                accessPingInfoControlsSafely caller = new accessPingInfoControlsSafely(PreviousPingInfoList_SetPings);
+                AccessPingInfoControlsSafely caller = new AccessPingInfoControlsSafely(PreviousPingInfoList_SetPings);
                 this.Invoke(caller, new object[] { pingList, accessTime });
             }
             else
@@ -311,7 +313,7 @@ namespace DbD_Pingz
                                             row.Height = ipWhoisList[rowIpString].CountryFlag.Height;
                                         }
                                     }
-                                    if (ipWhoisList[rowIpString].isJsonParsed)
+                                    if (ipWhoisList[rowIpString].IsJsonParsed)
                                     {
                                         if (ipWhoisList[rowIpString].ipWhoisInfo.Org.ToLower().Contains("valve"))
                                         {
@@ -334,7 +336,7 @@ namespace DbD_Pingz
         {
             if (pingInfoList.InvokeRequired)
             {
-                accessPingInfoControlsSafely caller = new accessPingInfoControlsSafely(PingInfoList_SetPings);
+                AccessPingInfoControlsSafely caller = new AccessPingInfoControlsSafely(PingInfoList_SetPings);
                 this.Invoke(caller, new object[] { pingList, accessTime });
             }
             else
@@ -436,7 +438,7 @@ namespace DbD_Pingz
         {
             if (pingInfoChart.InvokeRequired)
             {
-                accessPingInfoControlsSafely caller = new accessPingInfoControlsSafely(PingInfoChart_SetPings);
+                AccessPingInfoControlsSafely caller = new AccessPingInfoControlsSafely(PingInfoChart_SetPings);
                 this.Invoke(caller, new object[] { pingList, accessTime });
             }
             else
@@ -761,10 +763,38 @@ namespace DbD_Pingz
             SplitContainer splitContainer = (SplitContainer)sender;
             settings.MainWindowSplitter2Distance = splitContainer.SplitterDistance;
         }
+
+        private void pingInfoChart_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                chartContextMenu.Show(pingInfoChart, e.Location);
+            }
+        }
+
+        private void toggleGridLinesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem item = (ToolStripMenuItem)sender;
+            if (item.Checked)
+            {
+                pingInfoChart.ChartAreas[0].AxisX.MajorGrid.Enabled = true;
+                pingInfoChart.ChartAreas[0].AxisY.MajorGrid.Enabled = true;
+                item.Checked = false;
+            }
+            else if (!item.Checked)
+            {
+                pingInfoChart.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+                pingInfoChart.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
+                item.Checked = true;
+            }
+        }
+
         #endregion
 
         #region OVERRIDES
 
         #endregion
+
+
     }
 }

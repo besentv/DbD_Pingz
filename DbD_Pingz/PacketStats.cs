@@ -40,7 +40,7 @@ namespace DbD_Pingz
         {
             if(total > 0)
             {
-                PacketLoss = (float) ((float)dismissed / (float)total);
+                PacketLoss = (float) dismissed / total;
             }
         }
 

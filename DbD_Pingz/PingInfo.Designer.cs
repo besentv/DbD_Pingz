@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PingInfo));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pingInfoList = new System.Windows.Forms.DataGridView();
             this.ipColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PingColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -65,6 +65,8 @@
             this.whoisThisIPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetTableToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.killToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chartContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toggleGridLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pingInfoList)).BeginInit();
             this.ipRightKlickMenu.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -79,6 +81,7 @@
             this.splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.previousPingInfoList)).BeginInit();
             this.previousPingInfoContextMenu.SuspendLayout();
+            this.chartContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // pingInfoList
@@ -229,39 +232,39 @@
             // 
             // pingInfoChart
             // 
-            chartArea1.AxisX.Interval = 1D;
-            chartArea1.AxisX.IntervalOffset = 1D;
-            chartArea1.AxisX.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea1.AxisX.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea1.AxisX.IsMarginVisible = false;
-            chartArea1.AxisX.LabelStyle.Enabled = false;
-            chartArea1.AxisX.ScaleView.MinSize = 20D;
-            chartArea1.AxisX.ScaleView.Position = 0D;
-            chartArea1.AxisX.ScaleView.Size = 20D;
-            chartArea1.AxisX.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea1.AxisX.ScrollBar.Enabled = false;
-            chartArea1.AxisX.Title = "Time";
-            chartArea1.AxisY.Interval = 25D;
-            chartArea1.AxisY.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
-            chartArea1.AxisY.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea1.AxisY.IsLabelAutoFit = false;
-            chartArea1.AxisY.IsMarginVisible = false;
-            chartArea1.AxisY.LabelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            chartArea1.AxisY.Minimum = 0D;
-            chartArea1.AxisY.ScaleView.Size = 250D;
-            chartArea1.AxisY.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
-            chartArea1.AxisY.ScrollBar.Enabled = false;
-            chartArea1.AxisY.Title = "Ping";
-            chartArea1.AxisY.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            chartArea1.BorderWidth = 0;
-            chartArea1.Name = "pingChartArea";
-            this.pingInfoChart.ChartAreas.Add(chartArea1);
+            chartArea3.AxisX.Interval = 1D;
+            chartArea3.AxisX.IntervalOffset = 1D;
+            chartArea3.AxisX.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea3.AxisX.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea3.AxisX.IsMarginVisible = false;
+            chartArea3.AxisX.LabelStyle.Enabled = false;
+            chartArea3.AxisX.ScaleView.MinSize = 20D;
+            chartArea3.AxisX.ScaleView.Position = 0D;
+            chartArea3.AxisX.ScaleView.Size = 20D;
+            chartArea3.AxisX.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea3.AxisX.ScrollBar.Enabled = false;
+            chartArea3.AxisX.Title = "Time";
+            chartArea3.AxisY.Interval = 25D;
+            chartArea3.AxisY.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
+            chartArea3.AxisY.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea3.AxisY.IsLabelAutoFit = false;
+            chartArea3.AxisY.IsMarginVisible = false;
+            chartArea3.AxisY.LabelStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            chartArea3.AxisY.Minimum = 0D;
+            chartArea3.AxisY.ScaleView.Size = 250D;
+            chartArea3.AxisY.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
+            chartArea3.AxisY.ScrollBar.Enabled = false;
+            chartArea3.AxisY.Title = "Ping";
+            chartArea3.AxisY.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            chartArea3.BorderWidth = 0;
+            chartArea3.Name = "pingChartArea";
+            this.pingInfoChart.ChartAreas.Add(chartArea3);
             this.pingInfoChart.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pingInfoChart.IsSoftShadows = false;
-            legend1.IsTextAutoFit = false;
-            legend1.MaximumAutoSize = 30F;
-            legend1.Name = "Legend1";
-            this.pingInfoChart.Legends.Add(legend1);
+            legend3.IsTextAutoFit = false;
+            legend3.MaximumAutoSize = 30F;
+            legend3.Name = "Legend1";
+            this.pingInfoChart.Legends.Add(legend3);
             this.pingInfoChart.Location = new System.Drawing.Point(0, 40);
             this.pingInfoChart.Margin = new System.Windows.Forms.Padding(0);
             this.pingInfoChart.Name = "pingInfoChart";
@@ -269,6 +272,7 @@
             this.pingInfoChart.Size = new System.Drawing.Size(467, 316);
             this.pingInfoChart.TabIndex = 3;
             this.pingInfoChart.Text = "chart1";
+            this.pingInfoChart.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pingInfoChart_MouseClick);
             this.pingInfoChart.MouseEnter += new System.EventHandler(this.PingInfoChart_MouseEnter);
             this.pingInfoChart.MouseLeave += new System.EventHandler(this.PingInfoChart_MouseLeave);
             // 
@@ -385,8 +389,8 @@
             // lastConnectionTime
             // 
             this.lastConnectionTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle1.Format = "HH:mm:ss - dd:MM:yyyy";
-            this.lastConnectionTime.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Format = "HH:mm:ss - dd:MM:yyyy";
+            this.lastConnectionTime.DefaultCellStyle = dataGridViewCellStyle3;
             this.lastConnectionTime.HeaderText = "Last time connected at";
             this.lastConnectionTime.MinimumWidth = 40;
             this.lastConnectionTime.Name = "lastConnectionTime";
@@ -437,6 +441,20 @@
             this.killToolStripMenuItem.Size = new System.Drawing.Size(314, 22);
             this.killToolStripMenuItem.Text = ":( (Needs elevated privileges)";
             // 
+            // chartContextMenu
+            // 
+            this.chartContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toggleGridLinesToolStripMenuItem});
+            this.chartContextMenu.Name = "chartContextMenu";
+            this.chartContextMenu.Size = new System.Drawing.Size(219, 48);
+            // 
+            // toggleGridLinesToolStripMenuItem
+            // 
+            this.toggleGridLinesToolStripMenuItem.Name = "toggleGridLinesToolStripMenuItem";
+            this.toggleGridLinesToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
+            this.toggleGridLinesToolStripMenuItem.Text = "Gridlines Disabled";
+            this.toggleGridLinesToolStripMenuItem.Click += new System.EventHandler(this.toggleGridLinesToolStripMenuItem_Click);
+            // 
             // PingInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -470,6 +488,7 @@
             this.splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.previousPingInfoList)).EndInit();
             this.previousPingInfoContextMenu.ResumeLayout(false);
+            this.chartContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -509,5 +528,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn lastConnectionTime;
         private System.Windows.Forms.DataGridViewImageColumn Country;
         private System.Windows.Forms.DataGridViewCheckBoxColumn IsValveISP;
+        private System.Windows.Forms.ContextMenuStrip chartContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem toggleGridLinesToolStripMenuItem;
     }
 }
