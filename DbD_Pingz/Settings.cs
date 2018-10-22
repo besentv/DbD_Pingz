@@ -22,6 +22,7 @@ namespace DbD_Pingz
         private string _LastNetworkAdapterName;
         private string _PingInfoChartPaletteString;
         private bool _UseAveragePing;
+        private bool _ShowChartGridlines;
 
 
         [XmlElement("MaximumGoodPing")]
@@ -197,6 +198,17 @@ namespace DbD_Pingz
             }
         }
 
+        [XmlElement("ShowChartGridlines")]
+        public bool ShowChartGridlines
+        {
+            get { return _ShowChartGridlines; }
+            set
+            {
+                _ShowChartGridlines = value;
+                fireSettingsChangedEvent("ShowChartGridlines");
+            }
+        }
+
         public event PropertyChangedEventHandler onSettingsChanged;
 
         public Settings()
@@ -214,6 +226,7 @@ namespace DbD_Pingz
             LastNetworkAdapterName = null;
             PingInfoChartPalette = ChartColorPalette.BrightPastel;
             UseAveragePing = false;
+            ShowChartGridlines = true;
 
         }
 

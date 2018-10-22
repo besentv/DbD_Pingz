@@ -22,7 +22,7 @@ namespace DbD_Pingz
     {
         private DataGridView.HitTestInfo lastHitItem;
         private StripLine maxGoodPingLine = new StripLine();
-
+        
         private Settings settings;
         private CountryStatsDatabase countryDB = new CountryStatsDatabase(Pingz.countryStatsDBName);
 
@@ -88,6 +88,8 @@ namespace DbD_Pingz
             this.pingInfoChart.ChartAreas[0].AxisX.ScaleView.Scroll(chartCounter);
             this.maxGoodPingLine.IntervalOffset = settings.MaximumGoodPing;
             this.pingInfoChart.Palette = settings.PingInfoChartPalette;
+            this.SetPingInfoChartGridLineState(settings.ShowChartGridlines);
+            this.toggleGridLinesToolStripMenuItem.Checked = settings.ShowChartGridlines;
         }
 
         private void SaveSettings()
@@ -507,7 +509,7 @@ namespace DbD_Pingz
                                 series.XValueType = ChartValueType.Int32;
                                 series.YValueType = ChartValueType.Int32;
                                 series.IsVisibleInLegend = false;
-                                series.BorderWidth = 2;
+                                series.BorderWidth = 3;
                                 series.Points.AddXY(chartCounter, pingList[ip].TimeElapsed.Milliseconds);
                             }
                         }
@@ -777,16 +779,21 @@ namespace DbD_Pingz
             ToolStripMenuItem item = (ToolStripMenuItem)sender;
             if (item.Checked)
             {
-                pingInfoChart.ChartAreas[0].AxisX.MajorGrid.Enabled = true;
-                pingInfoChart.ChartAreas[0].AxisY.MajorGrid.Enabled = true;
+                SetPingInfoChartGridLineState(false);
                 item.Checked = false;
             }
             else if (!item.Checked)
             {
-                pingInfoChart.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
-                pingInfoChart.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
+                SetPingInfoChartGridLineState(true);
                 item.Checked = true;
             }
+        }
+
+        private void SetPingInfoChartGridLineState(bool isEnabled)
+        {
+            pingInfoChart.ChartAreas[0].AxisX.MajorGrid.Enabled = isEnabled;
+            pingInfoChart.ChartAreas[0].AxisY.MajorGrid.Enabled = isEnabled;
+            settings.ShowChartGridlines = isEnabled;
         }
 
         #endregion
