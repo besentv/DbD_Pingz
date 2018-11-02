@@ -2,7 +2,7 @@
  * This file controls everything happening in the main window.
  * 
  *
- */ 
+ */
 
 using System;
 using System.Linq;
@@ -22,7 +22,7 @@ namespace DbD_Pingz
     {
         private DataGridView.HitTestInfo lastHitItem;
         private StripLine maxGoodPingLine = new StripLine();
-        
+
         private Settings settings;
         private CountryStatsDatabase countryDB = new CountryStatsDatabase(Pingz.countryStatsDBName);
 
@@ -188,7 +188,22 @@ namespace DbD_Pingz
         {
             if (!pingList.ContainsKey(ping.Ip))
             {
-                pingList.TryAdd(ping.Ip, ping);
+                if (pingList.TryAdd(ping.Ip, ping) == true)
+                {
+                    if (!ipWhoisList.ContainsKey(ping.Ip.ToString())) //WHOIS new ips.
+                    {
+                        Console.WriteLine("Could not find entry for " + ping.Ip.ToString() + "in ipWhoisList! Going to whois...");
+                        ipWhoisList.Add(ping.Ip.ToString(), new IpWhois(ping.Ip.ToString(), countryDB));
+                    }
+                    else if (ipWhoisList.ContainsKey(ping.Ip.ToString()))
+                    {
+                        Console.WriteLine("Found entry for " + ping.Ip.ToString() + "in ipWhoisList!");
+                        if (countryDB != null)
+                        {
+                            countryDB.IncrementCountry(ipWhoisList[ping.Ip.ToString()].ipWhoisInfo.Country);
+                        }
+                    }
+                }
             }
             else if (pingList.ContainsKey(ping.Ip))
             {
@@ -389,22 +404,6 @@ namespace DbD_Pingz
                         }
                         if (!containsKey && !timedOut) //Add row if list doesn't contain IP.
                         {
-                            if (!ipWhoisList.ContainsKey(ip.ToString())) //First WHOIS new ips.
-                            {
-                                Console.WriteLine("Could not find entry for " + ip.ToString() + "in ipWhoisList! Going to whois...");
-                                ipWhoisList.Add(ip.ToString(), new IpWhois(ip.ToString(), countryDB));
-                            }
-                            else if (ipWhoisList.ContainsKey(ip.ToString()))
-                            {
-                                Console.WriteLine("Found entry for " + ip.ToString() + "in ipWhoisList!");
-                                if (ipWhoisList[ip.ToString()].ipWhoisInfo != null)
-                                {
-                                    if (countryDB != null)
-                                    {
-                                        countryDB.IncrementCountry(ipWhoisList[ip.ToString()].ipWhoisInfo.Country);
-                                    }
-                                }
-                            }
 
                             int rowNumber;
                             rowNumber = pingInfoList.Rows.Add(new object[] { ip.ToString(), pingList[ip].TimeElapsed.Milliseconds + "ms", "?/? -> ?%" });
@@ -745,7 +744,7 @@ namespace DbD_Pingz
 
         private void viewConnectionStatsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           // countryDB.PrintTableDebugList();
+            // countryDB.PrintTableDebugList();
             new CountryStatsForm(countryDB.GetDataTableFromTable()).ShowDialog(this);
         }
 
