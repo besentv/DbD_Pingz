@@ -44,9 +44,12 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.useAveragePingCheckBox = new System.Windows.Forms.CheckBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.pingInfoChartWidthUpdown = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.maxGoodPingNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.secondsToTimeoutNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutedIpRemoveNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pingInfoChartWidthUpdown)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -235,11 +238,46 @@
             this.useAveragePingCheckBox.UseVisualStyleBackColor = true;
             this.useAveragePingCheckBox.CheckedChanged += new System.EventHandler(this.useAveragePingCheckBox_CheckedChanged);
             // 
+            // label8
+            // 
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(69, 212);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(152, 20);
+            this.label8.TabIndex = 0;
+            this.label8.Text = "Ping info chart width:";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // pingInfoChartWidthUpdown
+            // 
+            this.pingInfoChartWidthUpdown.Location = new System.Drawing.Point(227, 212);
+            this.pingInfoChartWidthUpdown.Maximum = new decimal(new int[] {
+            40,
+            0,
+            0,
+            0});
+            this.pingInfoChartWidthUpdown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.pingInfoChartWidthUpdown.Name = "pingInfoChartWidthUpdown";
+            this.pingInfoChartWidthUpdown.Size = new System.Drawing.Size(85, 20);
+            this.pingInfoChartWidthUpdown.TabIndex = 8;
+            this.pingInfoChartWidthUpdown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.pingInfoChartWidthUpdown.ValueChanged += new System.EventHandler(this.pingInfoChartWidthUpdown_ValueChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(320, 211);
+            this.ClientSize = new System.Drawing.Size(320, 246);
+            this.Controls.Add(this.pingInfoChartWidthUpdown);
             this.Controls.Add(this.useAveragePingCheckBox);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.chartPaletteSelect);
@@ -262,6 +300,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.maxGoodPingNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.secondsToTimeoutNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutedIpRemoveNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pingInfoChartWidthUpdown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -283,5 +322,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.CheckBox useAveragePingCheckBox;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown pingInfoChartWidthUpdown;
     }
 }

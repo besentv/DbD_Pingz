@@ -18,6 +18,7 @@ namespace DbD_Pingz
             this.timeoutedIpRemoveNumericUpDown.Value = settings.SecondsUntilTimeoutedIpRemoved;
             this.chartPaletteSelect.SelectedIndex = chartPaletteSelect.FindStringExact(settings.PingInfoChartPaletteString);
             this.useAveragePingCheckBox.Checked = settings.UseAveragePing;
+            this.pingInfoChartWidthUpdown.Value = settings.PingInfoChartWidth;
         }
 
         private void ChooseGoodPingColorButton_Click(object sender, EventArgs e)
@@ -74,6 +75,12 @@ namespace DbD_Pingz
         {
             CheckBox checkBox = (CheckBox)sender;
             ProgramSettings.UseAveragePing = checkBox.Checked;
+        }
+
+        private void pingInfoChartWidthUpdown_ValueChanged(object sender, EventArgs e)
+        {
+            NumericUpDown num = (NumericUpDown)sender;
+            ProgramSettings.PingInfoChartWidth = (Convert.ToInt32(num.Value));
         }
     }
 }

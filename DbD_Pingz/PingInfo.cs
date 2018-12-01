@@ -42,14 +42,15 @@ namespace DbD_Pingz
 
             LoadSettings(); //ALWAYS LOAD SETTINGS BEFORE YOU ACCESS ANYTHING ELSE !!!
 
-            //maxGoodPingLine.BackColor = Color.HotPink;
-            //maxGoodPingLine.Interval = 0;
-            //maxGoodPingLine.StripWidth = 1;
+            maxGoodPingLine.BackColor = Color.HotPink;
+            maxGoodPingLine.Interval = 0;
+            maxGoodPingLine.StripWidth = 1;
+            maxGoodPingLine.Text = "Max. Good Ping";
+
             previousPingInfoList.Columns[2].DefaultCellStyle.NullValue = null;
             previousPingInfoList.Columns[2].ValueType = typeof(DateTime);
             previousPingInfoList.MouseWheel += new MouseEventHandler(PreviousPingInfoList_MouseWheel);
-            //maxGoodPingLine.Text = "Max. Good Ping";
-
+            
             pingInformationSubscriberList.Add(new AccessPingInfoControlsSafely(this.PingInfoChart_SetPings)); //Chart first to get the line colors!
             pingInformationSubscriberList.Add(new AccessPingInfoControlsSafely(this.PingInfoList_SetPings));
             pingInformationSubscriberList.Add(new AccessPingInfoControlsSafely(this.PreviousPingInfoList_SetPings));
@@ -57,8 +58,9 @@ namespace DbD_Pingz
             pingReciever.CalculatedPingEvent += new CalculatedPingEventHandler(this.getPings);
             pingReciever.DismissedPacketEvent += new DismissedPacketHandler(this.getDismissedPacket);
             pingInfoChart.MouseWheel += new MouseEventHandler(PingInfoChart_MouseWheel);
-            //pingInfoChart.ChartAreas[0].AxisY.StripLines.Add(maxGoodPingLine);
+            pingInfoChart.ChartAreas[0].AxisY.StripLines.Add(maxGoodPingLine);
             pingInfoChart.ChartAreas[0].Position = new ElementPosition(0, 0, 100, 100); //Less whitespace around the chart
+            pingInfoChart.ChartAreas[0].AxisX.ScaleView.Size = settings.PingInfoChartWidth;
 
             ChangeNetworkAdapter(false);                                                                //Load previous network adapter
         }
@@ -73,7 +75,6 @@ namespace DbD_Pingz
                 Settings.WriteSettingsToXML(Pingz.saveXMLFileName, settings);
             }
             settings.onSettingsChanged += Settings_onSettingsChanged;
-
             this.Size = settings.PingInfoFormSize;
             Console.WriteLine("Splitter1 distance:" + settings.MainWindowSplitter1Distance);
             Console.WriteLine("Splitter2 distance:" + settings.MainWindowSplitter2Distance);
@@ -620,6 +621,7 @@ namespace DbD_Pingz
                     pingInfoChart.ChartAreas[0].AxisY.Interval = (pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size / 10);
                 }
             }
+            settings.PingInfoChartScale = (int)pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size;
         }
 
         private void PingInfoChart_MouseEnter(object sender, EventArgs e)
@@ -719,6 +721,14 @@ namespace DbD_Pingz
             {
                 this.pingInfoChart.Palette = settings.PingInfoChartPalette;
             }
+            else if (e.PropertyName.Equals("PingInfoChartWidth"))
+            {
+                this.pingInfoChart.ChartAreas[0].AxisX.ScaleView.Size = settings.PingInfoChartWidth;
+            }
+            else if (e.PropertyName.Equals("MaximumGoodPing"))
+            {
+                this.maxGoodPingLine.IntervalOffset = settings.MaximumGoodPing;
+            }
         }
 
         private void reportBugToolStripMenuItem_Click(object sender, EventArgs e)
@@ -739,7 +749,7 @@ namespace DbD_Pingz
             {
                 previousPingInfoList.FirstDisplayedScrollingRowIndex = previousPingInfoList.FirstDisplayedScrollingRowIndex + 1;
             }
-            settings.PingInfoChartScale = (int)pingInfoChart.ChartAreas[0].AxisY.ScaleView.Size;
+
         }
 
         private void viewConnectionStatsToolStripMenuItem_Click(object sender, EventArgs e)

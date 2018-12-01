@@ -23,6 +23,7 @@ namespace DbD_Pingz
         private string _PingInfoChartPaletteString;
         private bool _UseAveragePing;
         private bool _ShowChartGridlines;
+        private int _PingInfoChartWidth;
 
 
         [XmlElement("MaximumGoodPing")]
@@ -209,6 +210,17 @@ namespace DbD_Pingz
             }
         }
 
+        [XmlElement("PingInfoChartWidth")]
+        public int PingInfoChartWidth
+        {
+            get { return _PingInfoChartWidth; }
+            set
+            {
+                _PingInfoChartWidth = value;
+                fireSettingsChangedEvent("PingInfoChartWidth");
+            }
+        }
+
         public event PropertyChangedEventHandler onSettingsChanged;
 
         public Settings()
@@ -227,8 +239,10 @@ namespace DbD_Pingz
             PingInfoChartPalette = ChartColorPalette.BrightPastel;
             UseAveragePing = false;
             ShowChartGridlines = true;
+            PingInfoChartWidth = 20;
 
-        }
+
+    }
 
         private void fireSettingsChangedEvent(string propertyName)
         {
