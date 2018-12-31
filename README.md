@@ -1,5 +1,5 @@
 # Important info:
-Since Behaviour anounced dedicated servers for DbD this program is now in end of life state. ( No bigger updates anymore )
+Since Behaviour announced dedicated servers for DbD this program is now in end of life state. ( No bigger updates anymore )
 
 # DbD_Pingz
 Tool to get your ping, others' countries and packet loss in DbD:
