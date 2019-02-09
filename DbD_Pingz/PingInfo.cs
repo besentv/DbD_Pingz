@@ -223,25 +223,25 @@ namespace DbD_Pingz
                     {
                         List<TimeSpan> pings = new List<TimeSpan>(new TimeSpan[] { validateList[address].TimeElapsed })
                         {
-                            Capacity = 20
+                            Capacity = settings.PingInfoChartWidth //Average ping from ping chart width size
                         };
 
                         pingHistory.TryAdd(address, pings);
                     }
                     else if (pingHistory.ContainsKey(address))
                     {
-                        if (pingHistory[address].Count < 20)
+                        if (pingHistory[address].Count < pingHistory[address].Capacity)
                         {
                             pingHistory[address].Add(validateList[address].TimeElapsed);
                         }
-                        else if (pingHistory[address].Count >= 20)
+                        else if (pingHistory[address].Count >= pingHistory[address].Capacity)
                         {
                             //pingHistory[address].RemoveAt(0);
-                            for (int i = 0; i < 19; i++)
+                            for (int i = 0; i < (pingHistory[address].Capacity - 1); i++)
                             {
                                 pingHistory[address][i] = pingHistory[address][i + 1];
                             }
-                            pingHistory[address][19] = validateList[address].TimeElapsed;
+                            pingHistory[address][pingHistory[address].Capacity - 1] = validateList[address].TimeElapsed;
                         }
                     }
                     double avgTicks = 0;
@@ -249,7 +249,7 @@ namespace DbD_Pingz
                     //validateList[address].TimeElapsed = new TimeSpan(Convert.ToInt64(avgTicks));
                     TimeSpan avgTime = new TimeSpan(Convert.ToInt64(avgTicks));
                     int diff = avgTime.Milliseconds - validateList[address].TimeElapsed.Milliseconds;
-                    //Console.WriteLine("Average ping time from " + pingHistory[address].Count + " list entries calculated: " + avgTime.Milliseconds + "ms -> Difference: " + diff);
+                   // Console.WriteLine("Average ping time from " + pingHistory[address].Count + " list entries calculated: " + avgTime.Milliseconds + "ms -> Difference to exact value: " + diff + " - " + validateList[address].TimeElapsed.Milliseconds);
 
                     validateList[address] = new Ping(validateList[address], avgTime);
                 }
@@ -259,7 +259,7 @@ namespace DbD_Pingz
                     if (!validateList.ContainsKey(ip))
                     {
                         pingHistory.TryRemove(ip, out List<TimeSpan> ignored);
-                        Console.WriteLine("Removed " + ip.ToString() + " from ping history list2.");
+                        Console.WriteLine("Removed " + ip.ToString() + " from ping history list.");
                     }
                 }
             }

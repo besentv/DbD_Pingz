@@ -29,6 +29,7 @@ namespace DbD_Pingz
             if (devices.Count == 0)
             {
                 Console.WriteLine("No interfaces found! Make sure WinPcap is installed.");
+                MessageBox.Show("No interfaces found! Make sure WinPcap is installed.", "ERROR!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             for (int i = 0; i < devices.Count; i++)
