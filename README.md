@@ -1,3 +1,6 @@
+# Important info:
+Since Behaviour announced dedicated servers for DbD this program is now in end of life state. ( No bigger updates anymore )
+
 # DbD_Pingz
 Tool to get your ping, others' countries and packet loss in DbD:
 
@@ -9,7 +12,7 @@ PcapDotNet, Newtonsoft JSON, Go Squared Flags, http://ipinfo.io API
 ## How to use?
 * Download this repository.
 * Open it in Visual Studio and download the required NuGet packages.
-* Build the solution either with Visual Studio or MSBUILD.exe. If you don't know how to do this just ask me for a build on Twitter: http://twitter.besentv.xyz ;)
+* Build the solution either with Visual Studio or MSBUILD.exe.
 
  ### FAQ:
  * Why does Pingz not support IpV6? - Steam and DbD do not even work with pure IpV6...
