@@ -10,18 +10,28 @@ using Newtonsoft.Json;
 using System.Drawing;
 using System;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace DbD_Pingz
 {
     class IpWhoisInfo
     {
-        public string Ip { get; set; }
-        public string Hostname { get; set; }
-        public string City { get; set; }
-        public string Region { get; set; }
-        public string Country { get; set; }
-        public string Loc { get; set; }
-        public string Org { get; set; }
+
+        public IEnumerator<PropertyInfo> GetEnumerator()
+        {
+            foreach (var property in typeof(IpWhoisInfo).GetProperties())
+            {
+                yield return property;
+            }
+        }
+
+        public string Ip { get; set; } = "";
+        public string Hostname { get; set; } = "";
+        public string City { get; set; } = "";
+        public string Region { get; set; } = "";
+        public string Country { get; set; } = "_unknown";
+        public string Loc { get; set; } = "";
+        public string Org { get; set; } = "";
     }
 
     class IpWhois
@@ -73,7 +83,6 @@ namespace DbD_Pingz
             else
             {
                 ipWhoisInfo = new IpWhoisInfo();
-                ipWhoisInfo.Country = "_unknown";
             }
 
             Console.WriteLine("Trying to get country flag for country:" + ipWhoisInfo.Country);
@@ -81,6 +90,7 @@ namespace DbD_Pingz
 
             Console.WriteLine("Trying to get country name for country:" + ipWhoisInfo.Country);
             string countryName;
+
             if (CountryIdConverter.TryGetName(ipWhoisInfo.Country, out countryName))
             {
                CountryName = countryName;
