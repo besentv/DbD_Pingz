@@ -126,7 +126,8 @@ namespace DbD_Pingz
             IpV4Datagram ipV4Packet = packet.Ethernet.IpV4;
             UdpDatagram udp = ipV4Packet.Udp;
 
-            if (udp.Payload.Length == 68 && ipV4Packet.Destination == thisMachinesIpV4Address && udp.Payload[0] == 0x01)//STUN Reply from OTHER Ip! First payload byte for a STUN response is 1. 
+            //Payload length changed after dedicated servers update from 68 to 76.
+            if ((udp.Payload.Length == 68 || udp.Payload.Length == 76) && ipV4Packet.Destination == thisMachinesIpV4Address && udp.Payload[0] == 0x01)//STUN Reply from OTHER Ip! First payload byte for a STUN response is 1. 
             {
                 DataSegment transactionID = udp.Payload.Subsegment(4, 19);
 
@@ -141,14 +142,14 @@ namespace DbD_Pingz
                 }
             }
             else
-            {
-                if (udp.Payload.Length == 56 && ipV4Packet.Source == thisMachinesIpV4Address && udp.Payload[0] == 0x00) //STUN Request from OWN Ip! 
+            {           //Payload length changed after dedicated servers update from 56 to 64.
+                if ((udp.Payload.Length == 56 || udp.Payload.Length == 64) && ipV4Packet.Source == thisMachinesIpV4Address && udp.Payload[0] == 0x00) //STUN Request from OWN Ip! 
                 {
                     DataSegment transactionID = udp.Payload.Subsegment(4, 19);
                     StunInfo stunInfo = new StunInfo(packet.Timestamp, transactionID);
 
                     if (!waitingForResponse.ContainsKey(ipV4Packet.Destination))
-                    {                       
+                    {
                         waitingForResponse.Add(ipV4Packet.Destination, stunInfo);
                     }
                     else if (waitingForResponse.ContainsKey(ipV4Packet.Destination))
